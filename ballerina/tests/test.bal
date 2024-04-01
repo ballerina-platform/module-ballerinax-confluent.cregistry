@@ -21,9 +21,7 @@ configurable int identityMapCapacity = ?;
 configurable map<json> originals = ?;
 configurable map<string> headers = ?;
 
-@test:Config{
-    groups: ["test"]
-}
+@test:Config{}
 public isolated function testRegister() returns error? {
     SchemaRegistryClientConfig schemaRegistryClientConfig = {
         baseUrl,
@@ -45,12 +43,12 @@ public isolated function testRegister() returns error? {
             ]
         }`;
 
-    int|error registerResult = schemaRegistryClient.register("avro-topic", schema);
+    int|Error registerResult = schemaRegistryClient.register("avro-topic", schema);
     test:assertTrue(registerResult !is error);
 }
 
 @test:Config{}
-public isolated function testGetSchema() returns error? {
+public isolated function testGetSchemaById() returns error? {
     SchemaRegistryClientConfig schemaRegistryClientConfig = {
         baseUrl,
         identityMapCapacity,
@@ -59,12 +57,16 @@ public isolated function testGetSchema() returns error? {
     };
     SchemaRegistryClient schemaRegistryClient = check new (schemaRegistryClientConfig);
     
-    string|error getSchema = schemaRegistryClient.getById(100003);
-    test:assertTrue(getSchema !is error);
+    string schema = string `{"type":"record","name":"Student","namespace":"example.avro","fields":[{"name":"name","type":"string"},{"name":"favorite_color","type":["string","null"]}]}`;
+
+    int registerResult = check schemaRegistryClient.register("avro-topic", schema);
+
+    string getSchema = check schemaRegistryClient.getById(registerResult);
+    test:assertEquals(getSchema.toJson(), schema.toJson());
 }
 
 @test:Config{}
-public isolated function testIdToBytes() returns error? {
+public isolated function testGetId() returns error? {
 
     SchemaRegistryClientConfig schemaRegistryClientConfig = {
         baseUrl,
@@ -73,6 +75,45 @@ public isolated function testIdToBytes() returns error? {
         headers
     };
     SchemaRegistryClient schemaRegistryClient = check new (schemaRegistryClientConfig);
-    byte[]|error bytes = schemaRegistryClient.idToBytes(100003);
-    test:assertTrue(bytes is byte[]);
+    
+    string schema = string `
+        {
+            "namespace": "example.avro",
+            "type": "record",
+            "name": "Student",
+            "fields": [
+                {"name": "name", "type": "string"},
+                {"name": "favorite_color", "type": ["string", "null"]}
+            ]
+        }`;
+
+    int registerId = check schemaRegistryClient.register("avro-topic", schema);
+    int getId = check schemaRegistryClient.getId("avro-topic", schema);
+    test:assertEquals(registerId, getId);
+}
+
+@test:Config{}
+public isolated function testInvalidClientInitiation() returns error? {
+    SchemaRegistryClientConfig schemaRegistryClientConfig = {
+        baseUrl: "",
+        identityMapCapacity,
+        originals,
+        headers
+    };
+
+    SchemaRegistryClient schemaRegistryClient = check new (schemaRegistryClientConfig);
+
+    string schema = string `
+        {
+            "namespace": "example.avro",
+            "type": "record",
+            "name": "Student",
+            "fields": [
+                {"name": "name", "type": "string"},
+                {"name": "favorite_color", "type": ["string", "null"]}
+            ]
+        }`;
+
+    int|Error registerResult = schemaRegistryClient.register("avro-topic", schema);
+    test:assertTrue(registerResult is Error);
 }
