@@ -37,9 +37,9 @@ public isolated class SchemaRegistryClient {
         }
     }
 
-    public isolated function idToBytes(int id) returns byte[]|error {
+    public isolated function getId(string subject, string schema) returns int|error {
         lock {
-            return idToBytes(self.schemaRegistryClient, id);
+            return getId(self.schemaRegistryClient, subject, schema);
         }
     }
 }
@@ -56,6 +56,6 @@ isolated function getById(handle schemaRegistryClient, int id) returns string|er
     'class: "io.ballerina.lib.confluent.CustomSchemaRegistryClient"
 } external;
 
-isolated function idToBytes(handle schemaRegistryClient, int id) returns byte[]|error = @java:Method {
+isolated function getId(handle schemaRegistryClient, string subject, string schema) returns int|error = @java:Method {
     'class: "io.ballerina.lib.confluent.CustomSchemaRegistryClient"
 } external;
