@@ -18,9 +18,7 @@
 
 package io.ballerina.lib.confluent;
 
-import io.ballerina.runtime.api.creators.ValueCreator;
 import io.ballerina.runtime.api.utils.StringUtils;
-import io.ballerina.runtime.api.values.BArray;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BString;
 import io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient;
@@ -29,19 +27,23 @@ import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientExcept
 import org.apache.avro.Schema;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
+
+import static io.ballerina.lib.confluent.ModuleUtils.BASE_URL;
+import static io.ballerina.lib.confluent.ModuleUtils.HEADERS;
+import static io.ballerina.lib.confluent.ModuleUtils.IDENTITY_MAP_CAPACITY;
+import static io.ballerina.lib.confluent.ModuleUtils.ORIGINALS;
 
 public class CustomSchemaRegistryClient {
 
     SchemaRegistryClient schemaRegistryClient;
 
     public CustomSchemaRegistryClient(BMap<?, ?> config) {
-        BString baseUrl = (BString) config.get(StringUtils.fromString("baseUrl"));
-        long identityMapCapacity = config.getIntValue(StringUtils.fromString("identityMapCapacity"));
-        BMap<?, ?> originals = config.getMapValue(StringUtils.fromString("originals"));
-        BMap<?, ?> httpHeaders = config.getMapValue(StringUtils.fromString("headers"));
+        BString baseUrl = (BString) config.get(BASE_URL);
+        long identityMapCapacity = config.getIntValue(IDENTITY_MAP_CAPACITY);
+        BMap<?, ?> originals = config.getMapValue(ORIGINALS);
+        BMap<?, ?> httpHeaders = config.getMapValue(HEADERS);
 
         Map<String, String> configurations = new HashMap<>();
         for (BString key: (BString[]) originals.getKeys()) {
@@ -56,143 +58,31 @@ public class CustomSchemaRegistryClient {
                                                                    configurations, headers);
     }
 
-    public int register(BString subject, BString schema) throws IOException, RestClientException {
+    public Object register(BString subject, BString schema) {
         Schema.Parser parser = new Schema.Parser();
-        Schema schema1 = parser.parse(schema.getValue());
-        return schemaRegistryClient.register(subject.getValue(), schema1);
+        Schema avroSchema = parser.parse(schema.getValue());
+        try {
+            return schemaRegistryClient.register(subject.getValue(), avroSchema);
+        } catch (IOException | RestClientException e) {
+            return Utils.createError(e.getMessage());
+        }
     }
 
-//    public int getId(String s, Schema schema) throws IOException, RestClientException {
-//        return schemaRegistryClient.getId(s, schema);
-//    }
+    public Object getId(BString subject, BString schema) {
+        Schema.Parser parser = new Schema.Parser();
+        Schema avroSchema = parser.parse(schema.getValue());
+        try {
+            return schemaRegistryClient.getId(subject.getValue(), avroSchema);
+        } catch (IOException | RestClientException e) {
+            return Utils.createError(e.getMessage());
+        }
+    }
 
     public Object getById(int i) {
         try {
             return StringUtils.fromString(schemaRegistryClient.getById(i).toString());
         } catch (RestClientException | IOException e) {
-            return e;
+            return Utils.createError(e.getMessage());
         }
     }
-
-//    public Collection<String> getAllSubjects() throws IOException, RestClientException {
-//        return schemaRegistryClient.getAllSubjects();
-//    }
-
-    public BArray idToBytes(int value) {
-        ByteBuffer buffer = ByteBuffer.allocate(4);
-        buffer.putInt(value);
-        BArray byteArray = ValueCreator.createArrayValue(buffer.array());
-        return byteArray;
-    }
-
-//    public Integer deleteSchemaVersion(String s, String s1) throws IOException, RestClientException {
-//        return schemaRegistryClient.deleteSchemaVersion(s, s1);
-//    }
-
-//    public int register(String s, Schema schema, int i, int i1) throws IOException, RestClientException {
-//        return schemaRegistryClient.register(s, schema, i, i1);
-//    }
-//
-//    public Schema getByID(int i) throws IOException, RestClientException {
-//        return schemaRegistryClient.getByID(i);
-//    }
-//
-//    public Schema getBySubjectAndID(String s, int i) throws IOException, RestClientException {
-//        return schemaRegistryClient.getBySubjectAndID(s, i);
-//    }
-//
-//
-//    public Schema getBySubjectAndId(String s, int i) throws IOException, RestClientException {
-//        return schemaRegistryClient.getBySubjectAndId(s, i);
-//    }
-//
-//    @Override
-//    public SchemaMetadata getLatestSchemaMetadata(String s) throws IOException, RestClientException {
-//        return schemaRegistryClient.getLatestSchemaMetadata(s);
-//    }
-//
-//    @Override
-//    public SchemaMetadata getSchemaMetadata(String s, int i) throws IOException, RestClientException {
-//        return schemaRegistryClient.getSchemaMetadata(s, i);
-//    }
-//
-//    @Override
-//    public int getVersion(String s, Schema schema) throws IOException, RestClientException {
-//        return schemaRegistryClient.getVersion(s, schema);
-//    }
-//
-//    @Override
-//    public List<Integer> getAllVersions(String s) throws IOException, RestClientException {
-//        return schemaRegistryClient.getAllVersions(s);
-//    }
-//
-//    @Override
-//    public boolean testCompatibility(String s, Schema schema) throws IOException, RestClientException {
-//        return schemaRegistryClient.testCompatibility(s, schema);
-//    }
-//
-//    @Override
-//    public String updateCompatibility(String s, String s1) throws IOException, RestClientException {
-//        return schemaRegistryClient.updateCompatibility(s, s1);
-//    }
-//
-//    @Override
-//    public String getCompatibility(String s) throws IOException, RestClientException {
-//        return schemaRegistryClient.getCompatibility(s);
-//    }
-//
-//    @Override
-//    public String setMode(String s) throws IOException, RestClientException {
-//        return schemaRegistryClient.setMode(s);
-//    }
-//
-//    @Override
-//    public String setMode(String s, String s1) throws IOException, RestClientException {
-//        return schemaRegistryClient.setMode(s, s1);
-//    }
-//
-//    @Override
-//    public String getMode() throws IOException, RestClientException {
-//        return schemaRegistryClient.getMode();
-//    }
-//
-//    @Override
-//    public String getMode(String s) throws IOException, RestClientException {
-//        return schemaRegistryClient.getMode(s);
-//    }
-//
-//    @Override
-//    public Collection<String> getAllSubjects() throws IOException, RestClientException {
-//        return schemaRegistryClient.getAllSubjects();
-//    }
-//
-//    @Override
-//    public int getId(String s, Schema schema) throws IOException, RestClientException {
-//        return schemaRegistryClient.getId(s, schema);
-//    }
-//
-//    @Override
-//    public List<Integer> deleteSubject(String s) throws IOException, RestClientException {
-//        return schemaRegistryClient.deleteSubject(s);
-//    }
-//
-//    @Override
-//    public List<Integer> deleteSubject(Map<String, String> map, String s) throws IOException, RestClientException {
-//        return schemaRegistryClient.deleteSubject(map, s);
-//    }
-//
-//    @Override
-//    public Integer deleteSchemaVersion(String s, String s1) throws IOException, RestClientException {
-//        return schemaRegistryClient.deleteSchemaVersion(s, s1);
-//    }
-//
-//    @Override
-//    public Integer deleteSchemaVersion(Map<String, String> map, String s, String s1)
-//                                       throws IOException, RestClientException {
-//        return schemaRegistryClient.deleteSchemaVersion(map, s, s1);
-//    }
-
-//    public void reset() {
-//        schemaRegistryClient.reset();
-//    }
 }

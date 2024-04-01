@@ -21,23 +21,23 @@ public isolated class SchemaRegistryClient {
 
     private handle schemaRegistryClient;
 
-    public isolated function init(SchemaRegistryClientConfig regclient) returns error? {
+    public isolated function init(SchemaRegistryClientConfig regclient) returns Error? {
         self.schemaRegistryClient = generateSchemaRegistryClient(regclient);
     }
 
-    public isolated function register(string subject, string schema) returns int|error {
+    public isolated function register(string subject, string schema) returns int|Error {
         lock {
             return register(self.schemaRegistryClient, subject, schema);
         }
     }
 
-    public isolated function getById(int id) returns string|error {
+    public isolated function getById(int id) returns string|Error {
         lock {
             return getById(self.schemaRegistryClient, id);
         }
     }
 
-    public isolated function getId(string subject, string schema) returns int|error {
+    public isolated function getId(string subject, string schema) returns int|Error {
         lock {
             return getId(self.schemaRegistryClient, subject, schema);
         }
@@ -48,14 +48,14 @@ isolated function generateSchemaRegistryClient(SchemaRegistryClientConfig regcli
     'class: "io.ballerina.lib.confluent.CustomSchemaRegistryClient"
 } external;
 
-isolated function register(handle schemaRegistryClient, string subject, string schema) returns int|error = @java:Method {
+isolated function register(handle schemaRegistryClient, string subject, string schema) returns int|Error = @java:Method {
     'class: "io.ballerina.lib.confluent.CustomSchemaRegistryClient"
 } external;
 
-isolated function getById(handle schemaRegistryClient, int id) returns string|error = @java:Method {
+isolated function getById(handle schemaRegistryClient, int id) returns string|Error = @java:Method {
     'class: "io.ballerina.lib.confluent.CustomSchemaRegistryClient"
 } external;
 
-isolated function getId(handle schemaRegistryClient, string subject, string schema) returns int|error = @java:Method {
+isolated function getId(handle schemaRegistryClient, string subject, string schema) returns int|Error = @java:Method {
     'class: "io.ballerina.lib.confluent.CustomSchemaRegistryClient"
 } external;
