@@ -48,7 +48,7 @@ include ":checkstyle"
 include ":${projectName}-native"
 include ":${projectName}-ballerina"
 
- project(':checkstyle').projectDir = file("build-config${File.separator}checkstyle")
+project(':checkstyle').projectDir = file("build-config${File.separator}checkstyle")
 project(":${projectName}-native").projectDir = file('native')
 project(":${projectName}-ballerina").projectDir = file('ballerina')
 
