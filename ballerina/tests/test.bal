@@ -21,7 +21,7 @@ configurable int identityMapCapacity = ?;
 configurable map<json> originals = ?;
 configurable map<string> headers = ?;
 
-@test:Config{}
+@test:Config {}
 public isolated function testRegister() returns error? {
     SchemaRegistryClientConfig schemaRegistryClientConfig = {
         baseUrl,
@@ -47,7 +47,7 @@ public isolated function testRegister() returns error? {
     test:assertTrue(registerResult !is error);
 }
 
-@test:Config{}
+@test:Config {}
 public isolated function testGetSchemaById() returns error? {
     SchemaRegistryClientConfig schemaRegistryClientConfig = {
         baseUrl,
@@ -56,7 +56,7 @@ public isolated function testGetSchemaById() returns error? {
         headers
     };
     SchemaRegistryClient schemaRegistryClient = check new (schemaRegistryClientConfig);
-    
+
     string schema = string `{"type":"record","name":"Student","namespace":"example.avro","fields":[{"name":"name","type":"string"},{"name":"favorite_color","type":["string","null"]}]}`;
 
     int registerResult = check schemaRegistryClient.register("avro-topic", schema);
@@ -65,7 +65,7 @@ public isolated function testGetSchemaById() returns error? {
     test:assertEquals(getSchema.toJson(), schema.toJson());
 }
 
-@test:Config{}
+@test:Config {}
 public isolated function testGetId() returns error? {
 
     SchemaRegistryClientConfig schemaRegistryClientConfig = {
@@ -75,7 +75,7 @@ public isolated function testGetId() returns error? {
         headers
     };
     SchemaRegistryClient schemaRegistryClient = check new (schemaRegistryClientConfig);
-    
+
     string schema = string `
         {
             "namespace": "example.avro",
@@ -92,7 +92,7 @@ public isolated function testGetId() returns error? {
     test:assertEquals(registerId, getId);
 }
 
-@test:Config{}
+@test:Config {}
 public isolated function testInvalidClientInitiation() returns error? {
     SchemaRegistryClientConfig schemaRegistryClientConfig = {
         baseUrl: "",
