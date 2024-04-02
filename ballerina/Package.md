@@ -19,12 +19,12 @@ import ballerinax/confluent.regclient;
 ### Step 2: Instantiate a new connector
 
 ```ballerina
-    SchemaRegistryClient schemaRegistryClient = check new ({
-        baseUrl,
-        identityMapCapacity,
-        originals,
-        headers
-    });
+SchemaRegistryClient schemaRegistryClient = check new ({
+    baseUrl,
+    identityMapCapacity,
+    originals,
+    headers
+});
 ```
 
 ### Step 3: Invoke the connector operation
