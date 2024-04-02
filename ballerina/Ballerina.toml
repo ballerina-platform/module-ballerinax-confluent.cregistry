@@ -5,7 +5,7 @@ version = "0.1.0"
 authors = ["Ballerina"]
 export=["schema_registry"]
 keywords = ["schema_registry"]
-repository = "https://github.com/ballerina-platform/module-ballerinax-avro"
+repository = "https://github.com/ballerina-platform/module-ballerinax-confluent.cregistry"
 license = ["Apache-2.0"]
 distribution = "2201.8.2"
 
