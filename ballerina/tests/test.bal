@@ -24,14 +24,14 @@ configurable map<string> headers = ?;
 
 @test:Config {}
 public isolated function testRegister() returns error? {
-    SchemaRegistryClientConfig schemaRegistryClientConfig = {
+    ConnectionConfig ConnectionConfig = {
         baseUrl,
         identityMapCapacity,
         originals,
         headers
     };
 
-    SchemaRegistryClient schemaRegistryClient = check new (schemaRegistryClientConfig);
+    SchemaRegistryClient schemaRegistryClient = check new (ConnectionConfig);
 
     string schema = string `
         {
@@ -50,13 +50,13 @@ public isolated function testRegister() returns error? {
 
 @test:Config {}
 public isolated function testGetSchemaById() returns error? {
-    SchemaRegistryClientConfig schemaRegistryClientConfig = {
+    ConnectionConfig ConnectionConfig = {
         baseUrl,
         identityMapCapacity,
         originals,
         headers
     };
-    SchemaRegistryClient schemaRegistryClient = check new (schemaRegistryClientConfig);
+    SchemaRegistryClient schemaRegistryClient = check new (ConnectionConfig);
 
     string schema = string `{"type":"record","name":"Student","namespace":"example.avro","fields":[{"name":"name","type":"string"},{"name":"favorite_color","type":["string","null"]}]}`;
 
@@ -69,13 +69,13 @@ public isolated function testGetSchemaById() returns error? {
 @test:Config {}
 public isolated function testGetId() returns error? {
 
-    SchemaRegistryClientConfig schemaRegistryClientConfig = {
+    ConnectionConfig ConnectionConfig = {
         baseUrl,
         identityMapCapacity,
         originals,
         headers
     };
-    SchemaRegistryClient schemaRegistryClient = check new (schemaRegistryClientConfig);
+    SchemaRegistryClient schemaRegistryClient = check new (ConnectionConfig);
 
     string schema = string `
         {
@@ -95,14 +95,14 @@ public isolated function testGetId() returns error? {
 
 @test:Config {}
 public isolated function testInvalidClientInitiation() returns error? {
-    SchemaRegistryClientConfig schemaRegistryClientConfig = {
+    ConnectionConfig ConnectionConfig = {
         baseUrl: "",
         identityMapCapacity,
         originals,
         headers
     };
 
-    SchemaRegistryClient schemaRegistryClient = check new (schemaRegistryClientConfig);
+    SchemaRegistryClient schemaRegistryClient = check new (ConnectionConfig);
 
     string schema = string `
         {

@@ -14,7 +14,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
-public type SchemaRegistryClientConfig record {|
+public type ConnectionConfig record {|
     string baseUrl;
     int identityMapCapacity;
     map<json> originals;
