@@ -1,4 +1,4 @@
-## Package overview
+## Overview
 
 [Schema Registry](https://docs.confluent.io/platform/current/schema-registry/) serves as a centralized repository for managing Avro schemas, ensuring data consistency and compatibility in serialization and deserialization processes.
 
