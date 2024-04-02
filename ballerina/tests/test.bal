@@ -31,7 +31,7 @@ public isolated function testRegister() returns error? {
         headers
     };
 
-    SchemaRegistryClient schemaRegistryClient = check new (ConnectionConfig);
+    Client schemaRegistryClient = check new (ConnectionConfig);
 
     string schema = string `
         {
@@ -56,7 +56,7 @@ public isolated function testGetSchemaById() returns error? {
         originals,
         headers
     };
-    SchemaRegistryClient schemaRegistryClient = check new (ConnectionConfig);
+    Client schemaRegistryClient = check new (ConnectionConfig);
 
     string schema = string `{"type":"record","name":"Student","namespace":"example.avro","fields":[{"name":"name","type":"string"},{"name":"favorite_color","type":["string","null"]}]}`;
 
@@ -75,7 +75,7 @@ public isolated function testGetId() returns error? {
         originals,
         headers
     };
-    SchemaRegistryClient schemaRegistryClient = check new (ConnectionConfig);
+    Client schemaRegistryClient = check new (ConnectionConfig);
 
     string schema = string `
         {
@@ -102,7 +102,7 @@ public isolated function testInvalidClientInitiation() returns error? {
         headers
     };
 
-    SchemaRegistryClient schemaRegistryClient = check new (ConnectionConfig);
+    Client schemaRegistryClient = check new (ConnectionConfig);
 
     string schema = string `
         {
