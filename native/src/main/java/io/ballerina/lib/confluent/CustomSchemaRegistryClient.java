@@ -47,8 +47,8 @@ public class CustomSchemaRegistryClient {
 
         Map<String, String> configurations = new HashMap<>();
         for (BString key: (BString[]) originals.getKeys()) {
-            configurations.put(key.getValue()
-                    .replaceAll("^\"|\"$", ""), originals.get(key).toString());
+            configurations.put(key.getValue().replaceAll("^\"|\"$", ""),
+                               originals.get(key).toString());
         }
         Map<String, String> headers = new HashMap<>();
         for (BString header: (BString[]) httpHeaders.getKeys()) {
