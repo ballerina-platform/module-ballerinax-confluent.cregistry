@@ -16,10 +16,11 @@
  * under the License.
  */
 
-package io.ballerina.lib.confluent;
+package io.ballerina.lib.confluent.registry;
 
 import io.ballerina.runtime.api.utils.StringUtils;
 import io.ballerina.runtime.api.values.BMap;
+import io.ballerina.runtime.api.values.BObject;
 import io.ballerina.runtime.api.values.BString;
 import io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient;
 import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
@@ -30,59 +31,58 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.ballerina.lib.confluent.ModuleUtils.BASE_URL;
-import static io.ballerina.lib.confluent.ModuleUtils.HEADERS;
-import static io.ballerina.lib.confluent.ModuleUtils.IDENTITY_MAP_CAPACITY;
-import static io.ballerina.lib.confluent.ModuleUtils.ORIGINALS;
+import static io.ballerina.lib.confluent.registry.ModuleUtils.NATIVE_CLIENT;
+import static io.ballerina.lib.confluent.registry.Utils.CLIENT_INVOCATION_ERROR;
 
 public class CustomSchemaRegistryClient {
 
-    SchemaRegistryClient schemaRegistryClient;
-
-    public CustomSchemaRegistryClient(BMap<?, ?> config) {
-        BString baseUrl = (BString) config.get(BASE_URL);
-        long identityMapCapacity = config.getIntValue(IDENTITY_MAP_CAPACITY);
-        BMap<?, ?> originals = config.getMapValue(ORIGINALS);
-        BMap<?, ?> httpHeaders = config.getMapValue(HEADERS);
-
+    public static void generateSchemaRegistryClient(BObject registryClient, BMap<BString, Object> config) {
+        BString baseUrl = (BString) config.get(ModuleUtils.BASE_URL);
+        long identityMapCapacity = config.getIntValue(ModuleUtils.IDENTITY_MAP_CAPACITY);
+        BMap<BString, Object> originals = (BMap<BString, Object>) config.getMapValue(ModuleUtils.ORIGINALS);
+        BMap<BString, Object> httpHeaders = (BMap<BString, Object>) config.getMapValue(ModuleUtils.HEADERS);
         Map<String, String> configurations = new HashMap<>();
-        for (BString key: (BString[]) originals.getKeys()) {
+        for (BString key: originals.getKeys()) {
             configurations.put(key.getValue().replaceAll("^\"|\"$", ""),
                                originals.get(key).toString());
         }
         Map<String, String> headers = new HashMap<>();
-        for (BString header: (BString[]) httpHeaders.getKeys()) {
+        for (BString header: httpHeaders.getKeys()) {
             headers.put(header.getValue(), httpHeaders.get(header).toString());
         }
-        this.schemaRegistryClient = new CachedSchemaRegistryClient(baseUrl.getValue(), (int) identityMapCapacity,
-                                                                   configurations, headers);
+        SchemaRegistryClient registry = new CachedSchemaRegistryClient(baseUrl.getValue(), (int) identityMapCapacity,
+                                                                       configurations, headers);
+        registryClient.addNativeData(NATIVE_CLIENT, registry);
     }
 
-    public Object register(BString subject, BString schema) {
+    public static Object register(BObject registryClient, BString subject, BString schema) {
+        SchemaRegistryClient schemaRegistryClient = (SchemaRegistryClient) registryClient.getNativeData(NATIVE_CLIENT);
         Schema.Parser parser = new Schema.Parser();
         Schema avroSchema = parser.parse(schema.getValue());
         try {
             return schemaRegistryClient.register(subject.getValue(), avroSchema);
         } catch (IOException | RestClientException e) {
-            return Utils.createError(e.getMessage());
+            return Utils.createError(CLIENT_INVOCATION_ERROR, e);
         }
     }
 
-    public Object getId(BString subject, BString schema) {
+    public static Object getId(BObject registryClient, BString subject, BString schema) {
+        SchemaRegistryClient schemaRegistryClient = (SchemaRegistryClient) registryClient.getNativeData(NATIVE_CLIENT);
         Schema.Parser parser = new Schema.Parser();
         Schema avroSchema = parser.parse(schema.getValue());
         try {
             return schemaRegistryClient.getId(subject.getValue(), avroSchema);
         } catch (IOException | RestClientException e) {
-            return Utils.createError(e.getMessage());
+            return Utils.createError(CLIENT_INVOCATION_ERROR, e);
         }
     }
 
-    public Object getById(int i) {
+    public static Object getById(BObject registryClient, int i) {
+        SchemaRegistryClient schemaRegistryClient = (SchemaRegistryClient) registryClient.getNativeData(NATIVE_CLIENT);
         try {
             return StringUtils.fromString(schemaRegistryClient.getById(i).toString());
-        } catch (RestClientException | IOException e) {
-            return Utils.createError(e.getMessage());
+        } catch (IOException | RestClientException e) {
+            return Utils.createError(CLIENT_INVOCATION_ERROR, e);
         }
     }
 }

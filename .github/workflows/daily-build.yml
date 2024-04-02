@@ -2,7 +2,7 @@ name: Daily build
 
 on:
   schedule:
-    - cron: "30 2 * * *"
+    - cron: "30 0 * * *"
 
 jobs:
   call_workflow:
@@ -11,4 +11,4 @@ jobs:
     uses: ballerina-platform/ballerina-standard-library/.github/workflows/daily-build-connector-template.yml@main
     secrets: inherit
     with:
-      repo-name: module-ballerinax-confluent.regclient
+      repo-name: module-ballerinax-confluent.cregistry

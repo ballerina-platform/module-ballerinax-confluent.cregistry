@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package io.ballerina.lib.confluent;
+package io.ballerina.lib.confluent.registry;
 
 import io.ballerina.runtime.api.Environment;
 import io.ballerina.runtime.api.Module;
@@ -35,6 +35,7 @@ public class ModuleUtils {
     public static final BString IDENTITY_MAP_CAPACITY = StringUtils.fromString("identityMapCapacity");
     public static final BString ORIGINALS = StringUtils.fromString("originals");
     public static final BString HEADERS = StringUtils.fromString("headers");
+    public static final String NATIVE_CLIENT = "client";
 
     private static Module avroModule = null;
 
@@ -42,7 +43,6 @@ public class ModuleUtils {
         return avroModule;
     }
 
-    @SuppressWarnings("unused")
     public static void setModule(Environment env) {
         avroModule = env.getCurrentModule();
     }

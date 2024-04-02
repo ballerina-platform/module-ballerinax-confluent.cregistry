@@ -30,7 +30,6 @@ public isolated function testRegister() returns error? {
         originals,
         headers
     };
-
     Client schemaRegistryClient = check new (ConnectionConfig);
 
     string schema = string `
@@ -44,8 +43,7 @@ public isolated function testRegister() returns error? {
             ]
         }`;
 
-    int|Error registerResult = schemaRegistryClient.register(subject, schema);
-    test:assertTrue(registerResult !is error);
+    _ = check schemaRegistryClient.register(subject, schema);
 }
 
 @test:Config {}
@@ -61,14 +59,12 @@ public isolated function testGetSchemaById() returns error? {
     string schema = string `{"type":"record","name":"Student","namespace":"example.avro","fields":[{"name":"name","type":"string"},{"name":"favorite_color","type":["string","null"]}]}`;
 
     int registerResult = check schemaRegistryClient.register(subject, schema);
-
     string getSchema = check schemaRegistryClient.getById(registerResult);
     test:assertEquals(getSchema.toJson(), schema.toJson());
 }
 
 @test:Config {}
 public isolated function testGetId() returns error? {
-
     ConnectionConfig ConnectionConfig = {
         baseUrl,
         identityMapCapacity,
@@ -101,7 +97,6 @@ public isolated function testInvalidClientInitiation() returns error? {
         originals,
         headers
     };
-
     Client schemaRegistryClient = check new (ConnectionConfig);
 
     string schema = string `

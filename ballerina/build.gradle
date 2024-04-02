@@ -22,10 +22,10 @@ plugins {
     id 'io.ballerina.plugin'
 }
 
-description = 'Ballerina - Schema Registry Connector'
+description = 'Ballerina - Confluent Schema Registry Connector'
 
-def packageName = "confluent.regclient"
-def packageOrg = "ballerina"
+def packageName = "confluent.cregistry"
+def packageOrg = "ballerinax"
 def tomlVersion = stripBallerinaExtensionVersion("${project.version}")
 def ballerinaTomlFilePlaceHolder = new File("${project.rootDir}/build-config/resources/Ballerina.toml")
 def ballerinaTomlFile = new File("$project.projectDir/Ballerina.toml")
@@ -63,7 +63,6 @@ dependencies {
     jbalTools("org.ballerinalang:jballerina-tools:${ballerinaLangVersion}") {
         transitive = false
     }
-    ballerinaStdLibs "io.ballerina.stdlib:io-ballerina:${stdlibIoVersion}"
     externalJars(group: 'io.confluent', name: 'kafka-schema-registry-client', version: '5.3.2') {
         transitive = false
     }
@@ -112,36 +111,15 @@ task commitTomlFiles {
     }
 }
 
-publishing {
-    publications {
-        maven(MavenPublication) {
-            artifact source: createArtifactZip, extension: 'zip'
-        }
-    }
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/ballerina-platform/module-${packageOrg}-${packageName}")
-            credentials {
-                username = System.getenv("publishUser")
-                password = System.getenv("publishPAT")
-            }
-        }
-    }
-}
-
 clean {
     delete 'build'
 }
 
 updateTomlFiles.dependsOn copyStdlibs
 build.dependsOn copyToLib
+
 build.dependsOn ":${packageName}-native:build"
-
 test.dependsOn ":${packageName}-native:build"
-// publishToMavenLocal.dependsOn build
-// publish.dependsOn build
 
-build.dependsOn "generatePomFileForMavenPublication"
 publishToMavenLocal.dependsOn build
 publish.dependsOn build

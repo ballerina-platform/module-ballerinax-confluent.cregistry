@@ -5,7 +5,7 @@ version = "@toml.version@"
 authors = ["Ballerina"]
 export=["schema_registry"]
 keywords = ["schema_registry"]
-repository = "https://github.com/ballerina-platform/module-ballerinax-avro"
+repository = "https://github.com/ballerina-platform/module-ballerinax-confluent.cregistry"
 license = ["Apache-2.0"]
 distribution = "2201.8.2"
 
@@ -13,7 +13,7 @@ distribution = "2201.8.2"
 graalvmCompatible = true
 
 [[platform.java17.dependency]]
-path = "../native/build/libs/confluent.regclient-native-0.1.0-SNAPSHOT.jar"
+path = "../native/build/libs/confluent.cregistry-native-0.1.0-SNAPSHOT.jar"
 groupId = "io.ballerina.lib"
 artifactId = "schema-registry-native"
 version = "0.1.0"

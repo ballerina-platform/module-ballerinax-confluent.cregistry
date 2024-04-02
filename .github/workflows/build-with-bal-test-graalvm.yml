@@ -2,7 +2,7 @@ name: GraalVM Check
 
 on:
   schedule:
-    - cron: "30 18 * * *"
+    - cron: "30 12 * * *"
   workflow_dispatch:
 
 concurrency:
@@ -16,4 +16,4 @@ jobs:
     uses: ballerina-platform/ballerina-standard-library/.github/workflows/build-with-bal-test-graalvm-connector-template.yml@main
     secrets: inherit
     with:
-      additional-build-flags: "-x :confluent.regclient-examples:build"
+      additional-build-flags: "-x :confluent.cregistry-examples:build"

@@ -74,14 +74,12 @@ subprojects {
         jbalTools ("org.ballerinalang:jballerina-tools:${ballerinaLangVersion}") {
             transitive = false
         }
-        ballerinaStdLibs "io.ballerina.stdlib:io-ballerina:${stdlibIoVersion}"
-
     }
 }
 
 task build {
-    dependsOn(":confluent.regclient-native:build")
-    dependsOn(":confluent.regclient-ballerina:build")
+    dependsOn(":confluent.cregistry-native:build")
+    dependsOn(":confluent.cregistry-ballerina:build")
 }
 
 def moduleVersion = project.version.replace("-SNAPSHOT", "")

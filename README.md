@@ -1,15 +1,15 @@
-# Ballerina Schema Registry Connector
+# Ballerina Confluent Schema Registry Connector
 
-[![Build](https://github.com/ballerina-platform/module-ballerinax-confluent.regclient/actions/workflows/ci.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-confluent.regclient/actions/workflows/ci.yml)
-[![Trivy](https://github.com/ballerina-platform/module-ballerinax-confluent.regclient/actions/workflows/trivy-scan.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-confluent.regclient/actions/workflows/trivy-scan.yml)
-[![GraalVM Check](https://github.com/ballerina-platform/module-ballerinax-confluent.regclient/actions/workflows/build-with-bal-test-native.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-confluent.regclient/actions/workflows/build-with-bal-test-graalvm.yml)
-[![GitHub Last Commit](https://img.shields.io/github/last-commit/ballerina-platform/module-ballerinax-confluent.regclient.svg)](https://github.com/ballerina-platform/module-ballerinax-confluent.regclient/commits/main)
-[![GitHub Issues](https://img.shields.io/github/issues/ballerina-platform/ballerina-library/module/confluent.regclient.svg?label=Open%20Issues)](https://github.com/ballerina-platform/ballerina-library/labels/module%2Fconfluent.regclient)
+[![Build](https://github.com/ballerina-platform/module-ballerinax-confluent.cregistry/actions/workflows/ci.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-confluent.cregistry/actions/workflows/ci.yml)
+[![Trivy](https://github.com/ballerina-platform/module-ballerinax-confluent.cregistry/actions/workflows/trivy-scan.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-confluent.cregistry/actions/workflows/trivy-scan.yml)
+[![GraalVM Check](https://github.com/ballerina-platform/module-ballerinax-confluent.cregistry/actions/workflows/build-with-bal-test-native.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-confluent.cregistry/actions/workflows/build-with-bal-test-graalvm.yml)
+[![GitHub Last Commit](https://img.shields.io/github/last-commit/ballerina-platform/module-ballerinax-confluent.cregistry.svg)](https://github.com/ballerina-platform/module-ballerinax-confluent.cregistry/commits/main)
+[![GitHub Issues](https://img.shields.io/github/issues/ballerina-platform/ballerina-library/module/confluent.cregistry.svg?label=Open%20Issues)](https://github.com/ballerina-platform/ballerina-library/labels/module%2Fconfluent.cregistry)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-[Schema Registry](https://docs.confluent.io/platform/current/schema-registry/) serves as a centralized repository for managing Avro schemas, ensuring data consistency and compatibility in serialization and deserialization processes.
+[Confluent Schema Registry](https://docs.confluent.io/platform/current/schema-registry/) serves as a centralized repository for managing Avro schemas, ensuring data consistency and compatibility in serialization and deserialization processes.
 
-The Ballerina Schema Registry connector integrates with Confluent's Avro Schema Registry, providing users to efficiently manage schemas within Ballerina applications.
+The Ballerina Confluent Schema Registry connector integrates with Confluent's Avro Schema Registry, providing users to efficiently manage schemas within Ballerina applications.
 
 ## Quickstart
 
@@ -17,16 +17,16 @@ To use the Confluent schema registry connector in your Ballerina project, modify
 
 ### Step 1: Import the module
 
-Import the `ballerinax/confluent.regclient` module into your Ballerina project.
+Import the `ballerinax/confluent.cregistry` module into your Ballerina project.
 
 ```ballerina
-import ballerinax/confluent.regclient;
+import ballerinax/confluent.cregistry;
 ```
 
 ### Step 2: Instantiate a new connector
 
 ```ballerina
-SchemaRegistryClient schemaRegistryClient = check new ({
+cregistry:Client schemaRegistryClient = check new ({
     baseUrl,
     identityMapCapacity,
     originals,

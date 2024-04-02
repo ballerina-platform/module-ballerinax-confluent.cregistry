@@ -15,4 +15,4 @@ jobs:
     uses: ballerina-platform/ballerina-standard-library/.github/workflows/build-connector-template.yml@main
     secrets: inherit
     with:
-      repo-name: module-ballerinax-confluent.regclient
+      repo-name: module-ballerinax-confluent.cregistry

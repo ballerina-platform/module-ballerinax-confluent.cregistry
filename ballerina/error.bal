@@ -14,5 +14,12 @@
 // specific language governing permissions and limitations
 // under the License.
 
-# Represents any error related to Ballerina Schema Registry module
-public type Error distinct error;
+public type ErrorDetails record {|
+    int status?;
+    int errorCode?;
+|};
+
+public type Error distinct error<ErrorDetails>;
+
+// # Represents any error related to Ballerina Confluent Schema Registry module
+// public type Error distinct error;

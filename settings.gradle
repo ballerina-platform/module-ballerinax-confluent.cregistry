@@ -41,7 +41,7 @@ plugins {
     id "com.gradle.enterprise" version "3.13.2"
 }
 
-def projectName = 'confluent.regclient'
+def projectName = 'confluent.cregistry'
 rootProject.name = "ballerina ${projectName}"
 
 include ":checkstyle"

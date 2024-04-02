@@ -21,5 +21,5 @@ function init() {
 }
 
 function setModule() = @java:Method {
-    'class: "io.ballerina.lib.confluent.ModuleUtils"
+    'class: "io.ballerina.lib.confluent.registry.ModuleUtils"
 } external;

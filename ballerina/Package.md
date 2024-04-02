@@ -1,8 +1,8 @@
 ## Package overview
 
-[Schema Registry](https://docs.confluent.io/platform/current/schema-registry/) serves as a centralized repository for managing Avro schemas, ensuring data consistency and compatibility in serialization and deserialization processes.
+[Confluent Schema Registry](https://docs.confluent.io/platform/current/schema-registry/) serves as a centralized repository for managing Avro schemas, ensuring data consistency and compatibility in serialization and deserialization processes.
 
-The Ballerina Schema Registry connector integrates with Confluent's Avro Schema Registry, providing users to efficiently manage schemas within Ballerina applications.
+The Ballerina Confluent Schema Registry connector integrates with Confluent's Avro Schema Registry, providing users to efficiently manage schemas within Ballerina applications.
 
 ## Quickstart
 
@@ -10,16 +10,16 @@ To use the Confluent schema registry connector in your Ballerina project, modify
 
 ### Step 1: Import the module
 
-Import the `ballerinax/confluent.regclient` module into your Ballerina project.
+Import the `ballerinax/confluent.cregistry` module into your Ballerina project.
 
 ```ballerina
-import ballerinax/confluent.regclient;
+import ballerinax/confluent.cregistry;
 ```
 
 ### Step 2: Instantiate a new connector
 
 ```ballerina
-SchemaRegistryClient schemaRegistryClient = check new ({
+cregistry:Client schemaRegistryClient = check new ({
     baseUrl,
     identityMapCapacity,
     originals,

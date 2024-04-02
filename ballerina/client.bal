@@ -19,14 +19,12 @@ import ballerina/jballerina.java;
 # Consists of APIs to integrate with Avro Schema Registry.
 public isolated class Client {
 
-    private handle schemaRegistryClient;
-
     # Gets invoked to initialize the `connector`.
     #
     # + config - The configurations to be used when initializing the `connector`
     # + return - An `cregistry:Error` if connector initialization failed
-    public isolated function init(ConnectionConfig config) returns Error? {
-        self.schemaRegistryClient = generateSchemaRegistryClient(config);
+    public isolated function init(ConnectionConfig config) returns error? {
+        self.generateSchemaRegistryClient(config);
     }
 
     # Registers a schema with the schema registry.
@@ -34,46 +32,28 @@ public isolated class Client {
     # + subject - The subject under which the schema should be registered
     # + schema - The Avro schema to be registered
     # + return - The ID of the registered schema, or an `cregistry:Error` if registration fails
-    public isolated function register(string subject, string schema) returns int|Error {
-        lock {
-            return register(self.schemaRegistryClient, subject, schema);
-        }
-    }
+    isolated function register(string subject, string schema) returns int|Error = @java:Method {
+        'class: "io.ballerina.lib.confluent.registry.CustomSchemaRegistryClient"
+    } external;
 
     # Retrieves a schema from the schema registry by its ID.
     # 
     # + id - The ID of the schema to retrieve
     # + return - The retrieved schema or an `cregistry:Error` if the schema does not exist
-    public isolated function getById(int id) returns string|Error {
-        lock {
-            return getById(self.schemaRegistryClient, id);
-        }
-    }
+    isolated function getById(int id) returns string|Error = @java:Method {
+        'class: "io.ballerina.lib.confluent.registry.CustomSchemaRegistryClient"
+    } external;
 
     # Retrieves the ID for the given subject and schema from the schema registry client.
     # 
     # + subject -  The subject of the schema
     # + schema - The Avro schema
     # + return - Returns the ID of the schema if found, or an `cregistry:Error` if an error occurs
-    public isolated function getId(string subject, string schema) returns int|Error {
-        lock {
-            return getId(self.schemaRegistryClient, subject, schema);
-        }
-    }
+    isolated function getId(string subject, string schema) returns int|Error = @java:Method {
+        'class: "io.ballerina.lib.confluent.registry.CustomSchemaRegistryClient"
+    } external;
+
+    private isolated function generateSchemaRegistryClient(ConnectionConfig cregistry) = @java:Method {
+        'class: "io.ballerina.lib.confluent.registry.CustomSchemaRegistryClient"
+    } external;
 }
-
-isolated function generateSchemaRegistryClient(ConnectionConfig regclient) returns handle = @java:Constructor {
-    'class: "io.ballerina.lib.confluent.CustomSchemaRegistryClient"
-} external;
-
-isolated function register(handle schemaRegistryClient, string subject, string schema) returns int|Error = @java:Method {
-    'class: "io.ballerina.lib.confluent.CustomSchemaRegistryClient"
-} external;
-
-isolated function getById(handle schemaRegistryClient, int id) returns string|Error = @java:Method {
-    'class: "io.ballerina.lib.confluent.CustomSchemaRegistryClient"
-} external;
-
-isolated function getId(handle schemaRegistryClient, string subject, string schema) returns int|Error = @java:Method {
-    'class: "io.ballerina.lib.confluent.CustomSchemaRegistryClient"
-} external;

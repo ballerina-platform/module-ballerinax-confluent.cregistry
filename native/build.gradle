@@ -38,14 +38,13 @@ dependencies {
     implementation group: 'org.ballerinalang', name: 'ballerina-lang', version: "${ballerinaLangVersion}"
     implementation group: 'org.ballerinalang', name: 'value', version: "${ballerinaLangVersion}"
 
-//    implementation group: 'org.slf4j', name: 'slf4j-nop', version: '2.0.3'
-    implementation group: 'org.apache.kafka', name: 'kafka-clients', version: '3.7.0'
-    implementation 'org.apache.avro:avro:1.11.3'
-    implementation 'io.confluent:kafka-avro-serializer:5.3.0'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.17.0'
-    implementation 'io.confluent:kafka-schema-registry-client:5.3.2'
-    implementation 'io.confluent:common-config:4.1.0'
-    implementation 'io.confluent:common-utils:5.3.0'
+    implementation group: 'org.apache.kafka', name: 'kafka-clients', version: "${kafkaClientVersion}"
+    implementation group: 'org.apache.avro', name: 'avro', version: "${avroVersion}"
+    implementation group: 'io.confluent', name: 'kafka-avro-serializer', version: "${kafkaAvroVersion}"
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "${jacksonVersion}"
+    implementation group: 'io.confluent', name: 'kafka-schema-registry-client', version: "${kafkaSchemaRegistryVersion}"
+    implementation group: 'io.confluent', name: 'common-config', version: "${commonConfigVersion}"
+    implementation group: 'io.confluent', name: 'common-utils', version: "${commonUtilsVersion}"
 }
 
 tasks.withType(JavaCompile) {
