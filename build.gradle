@@ -91,8 +91,8 @@ release {
     failOnSnapshotDependencies = true
     versionPropertyFile = 'gradle.properties'
     tagTemplate = 'v${version}'
-    // git {
-    //     requireBranch = "release-${moduleVersion}"
-    //     pushToRemote = 'origin'
-    // }
+    git {
+        requireBranch = "release-${moduleVersion}"
+        pushToRemote = 'origin'
+    }
 }

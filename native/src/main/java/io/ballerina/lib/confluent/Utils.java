@@ -16,7 +16,6 @@
  * under the License.
  */
 
-
 package io.ballerina.lib.confluent;
 
 import io.ballerina.runtime.api.creators.ErrorCreator;

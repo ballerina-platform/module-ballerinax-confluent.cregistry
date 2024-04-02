@@ -44,7 +44,7 @@ plugins {
 def projectName = 'confluent.regclient'
 rootProject.name = "ballerina ${projectName}"
 
- include ":checkstyle"
+include ":checkstyle"
 include ":${projectName}-native"
 include ":${projectName}-ballerina"
 
