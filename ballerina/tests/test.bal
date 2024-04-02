@@ -16,6 +16,7 @@
 
 import ballerina/test;
 
+configurable string subject = ?;
 configurable string baseUrl = ?;
 configurable int identityMapCapacity = ?;
 configurable map<json> originals = ?;
@@ -43,7 +44,7 @@ public isolated function testRegister() returns error? {
             ]
         }`;
 
-    int|Error registerResult = schemaRegistryClient.register("avro-topic", schema);
+    int|Error registerResult = schemaRegistryClient.register(subject, schema);
     test:assertTrue(registerResult !is error);
 }
 
@@ -59,7 +60,7 @@ public isolated function testGetSchemaById() returns error? {
 
     string schema = string `{"type":"record","name":"Student","namespace":"example.avro","fields":[{"name":"name","type":"string"},{"name":"favorite_color","type":["string","null"]}]}`;
 
-    int registerResult = check schemaRegistryClient.register("avro-topic", schema);
+    int registerResult = check schemaRegistryClient.register(subject, schema);
 
     string getSchema = check schemaRegistryClient.getById(registerResult);
     test:assertEquals(getSchema.toJson(), schema.toJson());
@@ -87,8 +88,8 @@ public isolated function testGetId() returns error? {
             ]
         }`;
 
-    int registerId = check schemaRegistryClient.register("avro-topic", schema);
-    int getId = check schemaRegistryClient.getId("avro-topic", schema);
+    int registerId = check schemaRegistryClient.register(subject, schema);
+    int getId = check schemaRegistryClient.getId(subject, schema);
     test:assertEquals(registerId, getId);
 }
 
@@ -114,6 +115,6 @@ public isolated function testInvalidClientInitiation() returns error? {
             ]
         }`;
 
-    int|Error registerResult = schemaRegistryClient.register("avro-topic", schema);
+    int|Error registerResult = schemaRegistryClient.register(subject, schema);
     test:assertTrue(registerResult is Error);
 }
