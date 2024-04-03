@@ -30,7 +30,7 @@ import java.util.Map;
 import static io.ballerina.lib.confluent.registry.ModuleUtils.getModule;
 import static io.ballerina.runtime.api.utils.StringUtils.fromString;
 
-public class Utils {
+public final class Utils {
 
     private Utils() {
     }
@@ -54,6 +54,6 @@ public class Utils {
             return ValueCreator.createRecordValue(getModule(), ERROR_DETAILS,
                                                   Map.of(STATUS, status, ERROR_CODE, errorCode));
         }
-        return ValueCreator.createRecordValue(getModule(), ERROR_DETAILS, (Map<String, Object>) null);
+        return ValueCreator.createRecordValue(getModule(), ERROR_DETAILS);
     }
 }

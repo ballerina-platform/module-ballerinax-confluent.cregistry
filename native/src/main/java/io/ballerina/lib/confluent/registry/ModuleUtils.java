@@ -28,7 +28,7 @@ import io.ballerina.runtime.api.values.BString;
  *
  * @since 0.1.0
  */
-public class ModuleUtils {
+public final class ModuleUtils {
 
     private ModuleUtils() {}
     public static final BString BASE_URL = StringUtils.fromString("baseUrl");
