@@ -27,6 +27,10 @@ public isolated class Client {
         self.generateSchemaRegistryClient(config);
     }
 
+    private isolated function generateSchemaRegistryClient(ConnectionConfig cregistry) = @java:Method {
+        'class: "io.ballerina.lib.confluent.registry.CustomSchemaRegistryClient"
+    } external;
+
     # Registers a schema with the schema registry.
     #
     # + subject - The subject under which the schema should be registered
@@ -50,10 +54,6 @@ public isolated class Client {
     # + schema - The Avro schema
     # + return - Returns the ID of the schema if found, or an `cregistry:Error` if an error occurs
     isolated function getId(string subject, string schema) returns int|Error = @java:Method {
-        'class: "io.ballerina.lib.confluent.registry.CustomSchemaRegistryClient"
-    } external;
-
-    private isolated function generateSchemaRegistryClient(ConnectionConfig cregistry) = @java:Method {
         'class: "io.ballerina.lib.confluent.registry.CustomSchemaRegistryClient"
     } external;
 }

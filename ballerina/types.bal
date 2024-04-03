@@ -14,6 +14,12 @@
 // specific language governing permissions and limitations
 // under the License.
 
+# Provides a set of configurations to control the behaviours when communicating with a schema registry.
+#
+# + baseUrl - The base URL of the schema registry endpoint
+# + identityMapCapacity - Capacity of the schema ID map for a particular subject
+# + originals - Connection configurations required to integrate with the schema registry
+# + headers - Custom headers to be included in the requests
 public type ConnectionConfig record {|
     string baseUrl;
     int identityMapCapacity;
