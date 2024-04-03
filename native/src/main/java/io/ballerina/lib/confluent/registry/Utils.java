@@ -54,6 +54,6 @@ public class Utils {
             return ValueCreator.createRecordValue(getModule(), ERROR_DETAILS,
                                                   Map.of(STATUS, status, ERROR_CODE, errorCode));
         }
-        return null;
+        return ValueCreator.createRecordValue(getModule(), ERROR_DETAILS, (Map<String, Object>) null);
     }
 }

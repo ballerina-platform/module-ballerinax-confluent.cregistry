@@ -34,7 +34,9 @@ import java.util.Map;
 import static io.ballerina.lib.confluent.registry.ModuleUtils.NATIVE_CLIENT;
 import static io.ballerina.lib.confluent.registry.Utils.CLIENT_INVOCATION_ERROR;
 
-public class CustomSchemaRegistryClient {
+public final class CustomSchemaRegistryClient {
+
+    private CustomSchemaRegistryClient() {}
 
     public static void generateSchemaRegistryClient(BObject registryClient, BMap<BString, Object> config) {
         BString baseUrl = (BString) config.get(ModuleUtils.BASE_URL);
@@ -57,22 +59,22 @@ public class CustomSchemaRegistryClient {
 
     public static Object register(BObject registryClient, BString subject, BString schema) {
         SchemaRegistryClient schemaRegistryClient = (SchemaRegistryClient) registryClient.getNativeData(NATIVE_CLIENT);
-        Schema.Parser parser = new Schema.Parser();
-        Schema avroSchema = parser.parse(schema.getValue());
         try {
+            Schema.Parser parser = new Schema.Parser();
+            Schema avroSchema = parser.parse(schema.getValue());
             return schemaRegistryClient.register(subject.getValue(), avroSchema);
-        } catch (IOException | RestClientException e) {
+        } catch (Exception e) {
             return Utils.createError(CLIENT_INVOCATION_ERROR, e);
         }
     }
 
     public static Object getId(BObject registryClient, BString subject, BString schema) {
         SchemaRegistryClient schemaRegistryClient = (SchemaRegistryClient) registryClient.getNativeData(NATIVE_CLIENT);
-        Schema.Parser parser = new Schema.Parser();
-        Schema avroSchema = parser.parse(schema.getValue());
         try {
+            Schema.Parser parser = new Schema.Parser();
+            Schema avroSchema = parser.parse(schema.getValue());
             return schemaRegistryClient.getId(subject.getValue(), avroSchema);
-        } catch (IOException | RestClientException e) {
+        } catch (Exception e) {
             return Utils.createError(CLIENT_INVOCATION_ERROR, e);
         }
     }
