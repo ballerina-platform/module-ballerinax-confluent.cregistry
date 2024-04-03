@@ -47,6 +47,30 @@ public isolated function testRegister() returns error? {
 }
 
 @test:Config {}
+public isolated function testInvalidSchemaRegister() returns error? {
+    ConnectionConfig ConnectionConfig = {
+        baseUrl,
+        identityMapCapacity,
+        originals,
+        headers
+    };
+    Client schemaRegistryClient = check new (ConnectionConfig);
+
+    string schema = string `
+        {
+            "type": "record",
+            "namespace": "data"
+        }`;
+
+    int|Error register = schemaRegistryClient.register(subject, schema);
+    test:assertTrue(register is error<ErrorDetails>);
+    if register !is int {
+        test:assertEquals(register.detail().status, ());
+        test:assertEquals(register.detail().errorCode, ());
+    } 
+}
+
+@test:Config {}
 public isolated function testGetSchemaById() returns error? {
     ConnectionConfig ConnectionConfig = {
         baseUrl,
@@ -61,6 +85,27 @@ public isolated function testGetSchemaById() returns error? {
     int registerResult = check schemaRegistryClient.register(subject, schema);
     string getSchema = check schemaRegistryClient.getById(registerResult);
     test:assertEquals(getSchema.toJson(), schema.toJson());
+}
+
+@test:Config {}
+public isolated function testGetInvalidSchemaById() returns error? {
+    ConnectionConfig ConnectionConfig = {
+        baseUrl,
+        identityMapCapacity,
+        originals,
+        headers
+    };
+    Client schemaRegistryClient = check new (ConnectionConfig);
+
+    string schema = string `{"type":"record","name":"Student","namespace":"example.avro","fields":[{"name":"name","type":"string"},{"name":"favorite_color","type":["string","null"]}]}`;
+    
+    int registerResult = check schemaRegistryClient.register(subject, schema);
+    string|error<ErrorDetails> getSchema = schemaRegistryClient.getById(registerResult * registerResult);
+    test:assertTrue(getSchema is error<ErrorDetails>);
+    if getSchema !is string {
+        test:assertEquals(getSchema.detail().status, 404);
+        test:assertEquals(getSchema.detail().errorCode, 40403);
+    }
 }
 
 @test:Config {}
