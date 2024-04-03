@@ -23,7 +23,7 @@ public isolated class Client {
     #
     # + config - The configurations to be used when initializing the `connector`
     # + return - An `cregistry:Error` if connector initialization failed
-    public isolated function init(ConnectionConfig config) returns error? {
+    public isolated function init(*ConnectionConfig config) returns error? {
         self.generateSchemaRegistryClient(config);
     }
 
