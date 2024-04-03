@@ -19,6 +19,11 @@ import ballerinax/confluent.cregistry;
 ### Step 2: Instantiate a new connector
 
 ```ballerina
+configurable string baseUrl = ?;
+configurable int identityMapCapacity = ?;
+configurable map<anydata> originals = ?;
+configurable map<string> headers = ?;
+
 cregistry:Client schemaRegistryClient = check new ({
     baseUrl,
     identityMapCapacity,
