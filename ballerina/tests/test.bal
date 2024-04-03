@@ -19,7 +19,7 @@ import ballerina/test;
 configurable string subject = ?;
 configurable string baseUrl = ?;
 configurable int identityMapCapacity = ?;
-configurable map<json> originals = ?;
+configurable map<anydata> originals = ?;
 configurable map<string> headers = ?;
 
 @test:Config {}
