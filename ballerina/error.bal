@@ -20,6 +20,3 @@ public type ErrorDetails record {|
 |};
 
 public type Error distinct error<ErrorDetails>;
-
-// # Represents any error related to Ballerina Confluent Schema Registry module
-// public type Error distinct error;
