@@ -17,6 +17,6 @@
 public type ConnectionConfig record {|
     string baseUrl;
     int identityMapCapacity;
-    map<json> originals;
+    map<anydata> originals;
     map<string> headers;
 |};
