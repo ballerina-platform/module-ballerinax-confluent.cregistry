@@ -1,9 +1,9 @@
 [package]
-org = "ballerina"
-name = "schema_registry"
+org = "ballerinax"
+name = "confluent.cregistry"
 version = "@toml.version@"
 authors = ["Ballerina"]
-export=["schema_registry"]
+export=["confluent.cregistry"]
 keywords = ["confluent", "schema_registry", "avro", "serdes"]
 repository = "https://github.com/ballerina-platform/module-ballerinax-confluent.cregistry"
 license = ["Apache-2.0"]
