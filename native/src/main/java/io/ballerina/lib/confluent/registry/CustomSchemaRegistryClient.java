@@ -79,7 +79,7 @@ public final class CustomSchemaRegistryClient {
         }
     }
 
-    public static Object getById(BObject registryClient, int i) {
+    public static Object getSchemaById(BObject registryClient, int i) {
         SchemaRegistryClient schemaRegistryClient = (SchemaRegistryClient) registryClient.getNativeData(NATIVE_CLIENT);
         try {
             return StringUtils.fromString(schemaRegistryClient.getById(i).toString());

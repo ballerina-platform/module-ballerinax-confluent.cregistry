@@ -44,7 +44,7 @@ public isolated class Client {
     # 
     # + id - The ID of the schema to retrieve
     # + return - The retrieved schema or an `cregistry:Error` if the schema does not exist
-    isolated function getById(int id) returns string|Error = @java:Method {
+    isolated function getSchemaById(int id) returns string|Error = @java:Method {
         'class: "io.ballerina.lib.confluent.registry.CustomSchemaRegistryClient"
     } external;
 

@@ -83,7 +83,7 @@ public isolated function testGetSchemaById() returns error? {
     string schema = string `{"type":"record","name":"Student","namespace":"example.avro","fields":[{"name":"name","type":"string"},{"name":"favorite_color","type":["string","null"]}]}`;
 
     int registerResult = check schemaRegistryClient.register(subject, schema);
-    string getSchema = check schemaRegistryClient.getById(registerResult);
+    string getSchema = check schemaRegistryClient.getSchemaById(registerResult);
     test:assertEquals(getSchema.toJson(), schema.toJson());
 }
 
@@ -100,7 +100,7 @@ public isolated function testGetInvalidSchemaById() returns error? {
     string schema = string `{"type":"record","name":"Student","namespace":"example.avro","fields":[{"name":"name","type":"string"},{"name":"favorite_color","type":["string","null"]}]}`;
     
     int registerResult = check schemaRegistryClient.register(subject, schema);
-    string|error<ErrorDetails> getSchema = schemaRegistryClient.getById(registerResult * registerResult);
+    string|error<ErrorDetails> getSchema = schemaRegistryClient.getSchemaById(registerResult * registerResult);
     test:assertTrue(getSchema is error<ErrorDetails>);
     if getSchema !is string {
         test:assertEquals(getSchema.detail().status, 404);
