@@ -68,7 +68,9 @@ task buildExamples {
     }
 }
 
+task build {
+    dependsOn buildExamples
+}
+
 buildExamples.dependsOn ":confluent.cregistry-ballerina:build"
 testExamples.dependsOn ":confluent.cregistry-ballerina:build"
-
-build.dependsOn buildExamples
