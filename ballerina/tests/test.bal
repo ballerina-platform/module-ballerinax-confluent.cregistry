@@ -130,8 +130,8 @@ public isolated function testGetId() returns error? {
         }`;
 
     int registerId = check schemaRegistryClient.register(subject, schema);
-    int getId = check schemaRegistryClient.getId(subject, schema);
-    test:assertEquals(registerId, getId);
+    int schemaId = check schemaRegistryClient.getId(subject, schema);
+    test:assertEquals(registerId, schemaId);
 }
 
 @test:Config {}

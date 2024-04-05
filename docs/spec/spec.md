@@ -93,7 +93,7 @@ The Confluent Schema Registry module provides a method to fetch a schema ID from
 The `getId` method retrieves a schema ID from the registry.
 
 ```ballerina
-int getId = check registry.getId(subject, schema);
+int schemaId = check registry.getId(subject, schema);
 ```
 
 ## 6. The `cregistry:Error` Type

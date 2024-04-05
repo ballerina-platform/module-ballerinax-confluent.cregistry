@@ -30,6 +30,6 @@ public function main() returns error? {
     int registerId = check schemaRegistryClient.register(subject, schema);
     io:println("Registered Id for the schema: ", registerId);
 
-    int getId = check schemaRegistryClient.getId(subject, schema);
-    io:println("Id for the given schema: ", getId);
+    int schemaId = check schemaRegistryClient.getId(subject, schema);
+    io:println("Id for the given schema: ", schemaId);
 }
