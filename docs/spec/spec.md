@@ -1,6 +1,7 @@
 # Specification: Ballerina Confluent Schema Registry Library
 
-_Owners_: @Nuvindu \
+_Authors_: @Nuvindu \
+
 _Reviewers_: @ThisaruGuruge \
 _Created_: 2024/04/04 \
 _Updated_: 2024/04/04 \
