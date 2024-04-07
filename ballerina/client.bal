@@ -17,7 +17,7 @@
 import ballerina/jballerina.java;
 
 # Consists of APIs to integrate with Avro Schema Registry.
-public isolated class Client {
+public isolated client class Client {
 
     # Gets invoked to initialize the `connector`.
     #
@@ -36,7 +36,7 @@ public isolated class Client {
     # + subject - The subject under which the schema should be registered
     # + schema - The Avro schema to be registered
     # + return - The ID of the registered schema, or an `cregistry:Error` if registration fails
-    public isolated function register(string subject, string schema) returns int|Error = @java:Method {
+    remote isolated function register(string subject, string schema) returns int|Error = @java:Method {
         'class: "io.ballerina.lib.confluent.registry.CustomSchemaRegistryClient"
     } external;
 
@@ -44,7 +44,7 @@ public isolated class Client {
     # 
     # + id - The ID of the schema to retrieve
     # + return - The retrieved schema or an `cregistry:Error` if the schema does not exist
-    public isolated function getSchemaById(int id) returns string|Error = @java:Method {
+    remote isolated function getSchemaById(int id) returns string|Error = @java:Method {
         'class: "io.ballerina.lib.confluent.registry.CustomSchemaRegistryClient"
     } external;
 
@@ -53,7 +53,7 @@ public isolated class Client {
     # + subject -  The subject of the schema
     # + schema - The Avro schema
     # + return - Returns the ID of the schema if found, or an `cregistry:Error` if an error occurs
-    public isolated function getId(string subject, string schema) returns int|Error = @java:Method {
+    remote isolated function getId(string subject, string schema) returns int|Error = @java:Method {
         'class: "io.ballerina.lib.confluent.registry.CustomSchemaRegistryClient"
     } external;
 }
