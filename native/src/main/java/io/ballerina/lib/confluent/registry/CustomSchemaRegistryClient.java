@@ -56,7 +56,7 @@ public final class CustomSchemaRegistryClient {
             headers.put(header.getValue(), httpHeaders.get(header).toString());
         }
         SchemaRegistryClient registry;
-        if (configurations.containsKey(SCHEMA_REGISTRY_URL_CONFIG) && 
+        if (configurations.containsKey(SCHEMA_REGISTRY_URL_CONFIG) &&
             configurations.get(SCHEMA_REGISTRY_URL_CONFIG).startsWith(MOCK_CLIENT)) {
             registry = new MockSchemaRegistryClient();
         } else {
