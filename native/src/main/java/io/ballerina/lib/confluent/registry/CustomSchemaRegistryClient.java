@@ -23,6 +23,7 @@ import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BObject;
 import io.ballerina.runtime.api.values.BString;
 import io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient;
+import io.confluent.kafka.schemaregistry.client.MockSchemaRegistryClient;
 import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
 import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException;
 import org.apache.avro.Schema;
@@ -33,6 +34,8 @@ import java.util.Map;
 
 import static io.ballerina.lib.confluent.registry.ModuleUtils.NATIVE_CLIENT;
 import static io.ballerina.lib.confluent.registry.Utils.CLIENT_INVOCATION_ERROR;
+import static io.ballerina.lib.confluent.registry.Utils.MOCK_CLIENT;
+import static io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG;
 
 public final class CustomSchemaRegistryClient {
 
@@ -52,8 +55,14 @@ public final class CustomSchemaRegistryClient {
         for (BString header: httpHeaders.getKeys()) {
             headers.put(header.getValue(), httpHeaders.get(header).toString());
         }
-        SchemaRegistryClient registry = new CachedSchemaRegistryClient(baseUrl.getValue(), (int) identityMapCapacity,
-                                                                       configurations, headers);
+        SchemaRegistryClient registry;
+        if (configurations.containsKey(SCHEMA_REGISTRY_URL_CONFIG) && 
+            configurations.get(SCHEMA_REGISTRY_URL_CONFIG).startsWith(MOCK_CLIENT)) {
+            registry = new MockSchemaRegistryClient();
+        } else {
+            registry = new CachedSchemaRegistryClient(baseUrl.getValue(), (int) identityMapCapacity,
+                                                      configurations, headers);
+        }
         registryClient.addNativeData(NATIVE_CLIENT, registry);
     }
 
