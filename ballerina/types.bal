@@ -22,7 +22,7 @@
 # + headers - Custom headers to be included in the requests
 public type ConnectionConfig record {|
     string baseUrl;
-    int identityMapCapacity;
-    map<anydata> originals;
-    map<string> headers;
+    int identityMapCapacity = 1000;
+    map<anydata> originals?;
+    map<string> headers?;
 |};
