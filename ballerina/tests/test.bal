@@ -22,16 +22,16 @@ configurable int identityMapCapacity = ?;
 configurable map<anydata> originals = ?;
 configurable map<string> headers = ?;
 
-@test:Config {}
-public isolated function testRegister() returns error? {
-    ConnectionConfig ConnectionConfig = {
-        baseUrl,
-        identityMapCapacity,
-        originals,
-        headers
-    };
-    Client schemaRegistryClient = check new (ConnectionConfig);
+Client schemaRegistryClient = check new ({
+    baseUrl,
+    identityMapCapacity,
+    originals,
+    headers
+});
 
+@test:Config {}
+public function testRegister() returns error? {
+    string subject = "test-topic";
     string schema = string `
         {
             "namespace": "example.avro",
@@ -43,64 +43,41 @@ public isolated function testRegister() returns error? {
             ]
         }`;
 
-    _ = check schemaRegistryClient.register(subject, schema);
+    _ = check schemaRegistryClient->register(subject, schema);
 }
 
 @test:Config {}
-public isolated function testInvalidSchemaRegister() returns error? {
-    ConnectionConfig ConnectionConfig = {
-        baseUrl,
-        identityMapCapacity,
-        originals,
-        headers
-    };
-    Client schemaRegistryClient = check new (ConnectionConfig);
-
+public function testInvalidSchemaRegister() returns error? {
     string schema = string `
         {
             "type": "record",
             "namespace": "data"
         }`;
 
-    int|Error register = schemaRegistryClient.register(subject, schema);
+    int|Error register = schemaRegistryClient->register(subject, schema);
     test:assertTrue(register is error<ErrorDetails>);
     if register !is int {
         test:assertEquals(register.detail().status, ());
         test:assertEquals(register.detail().errorCode, ());
-    } 
+    }
 }
 
 @test:Config {}
-public isolated function testGetSchemaById() returns error? {
-    ConnectionConfig ConnectionConfig = {
-        baseUrl,
-        identityMapCapacity,
-        originals,
-        headers
-    };
-    Client schemaRegistryClient = check new (ConnectionConfig);
-
+public function testGetSchemaById() returns error? {
     string schema = string `{"type":"record","name":"Student","namespace":"example.avro","fields":[{"name":"name","type":"string"},{"name":"favorite_color","type":["string","null"]}]}`;
 
-    int registerResult = check schemaRegistryClient.register(subject, schema);
-    string getSchema = check schemaRegistryClient.getSchemaById(registerResult);
+    int registerResult = check schemaRegistryClient->register(subject, schema);
+    string getSchema = check schemaRegistryClient->getSchemaById(registerResult);
     test:assertEquals(getSchema.toJson(), schema.toJson());
 }
 
 @test:Config {}
-public isolated function testGetInvalidSchemaById() returns error? {
-    ConnectionConfig ConnectionConfig = {
-        baseUrl,
-        identityMapCapacity,
-        originals,
-        headers
-    };
-    Client schemaRegistryClient = check new (ConnectionConfig);
+public function testGetInvalidSchemaById() returns error? {
 
     string schema = string `{"type":"record","name":"Student","namespace":"example.avro","fields":[{"name":"name","type":"string"},{"name":"favorite_color","type":["string","null"]}]}`;
-    
-    int registerResult = check schemaRegistryClient.register(subject, schema);
-    string|error<ErrorDetails> getSchema = schemaRegistryClient.getSchemaById(registerResult * registerResult);
+
+    int registerResult = check schemaRegistryClient->register(subject, schema);
+    string|error<ErrorDetails> getSchema = schemaRegistryClient->getSchemaById(registerResult * registerResult);
     test:assertTrue(getSchema is error<ErrorDetails>);
     if getSchema !is string {
         test:assertEquals(getSchema.detail().status, 404);
@@ -109,15 +86,7 @@ public isolated function testGetInvalidSchemaById() returns error? {
 }
 
 @test:Config {}
-public isolated function testGetId() returns error? {
-    ConnectionConfig ConnectionConfig = {
-        baseUrl,
-        identityMapCapacity,
-        originals,
-        headers
-    };
-    Client schemaRegistryClient = check new (ConnectionConfig);
-
+public function testGetId() returns error? {
     string schema = string `
         {
             "namespace": "example.avro",
@@ -129,13 +98,14 @@ public isolated function testGetId() returns error? {
             ]
         }`;
 
-    int registerId = check schemaRegistryClient.register(subject, schema);
-    int schemaId = check schemaRegistryClient.getId(subject, schema);
+    int registerId = check schemaRegistryClient->register(subject, schema);
+    int schemaId = check schemaRegistryClient->getId(subject, schema);
     test:assertEquals(registerId, schemaId);
 }
 
 @test:Config {}
-public isolated function testInvalidClientInitiation() returns error? {
+public function testInvalidClientInitiation() returns error? {
+    map<json> originals = {};
     ConnectionConfig ConnectionConfig = {
         baseUrl: "",
         identityMapCapacity,
@@ -143,7 +113,6 @@ public isolated function testInvalidClientInitiation() returns error? {
         headers
     };
     Client schemaRegistryClient = check new (ConnectionConfig);
-
     string schema = string `
         {
             "namespace": "example.avro",
@@ -155,6 +124,6 @@ public isolated function testInvalidClientInitiation() returns error? {
             ]
         }`;
 
-    int|Error registerResult = schemaRegistryClient.register(subject, schema);
+    int|Error registerResult = schemaRegistryClient->register(subject, schema);
     test:assertTrue(registerResult is Error);
 }

@@ -44,13 +44,17 @@ public final class CustomSchemaRegistryClient {
         BMap<BString, Object> originals = (BMap<BString, Object>) config.getMapValue(ModuleUtils.ORIGINALS);
         BMap<BString, Object> httpHeaders = (BMap<BString, Object>) config.getMapValue(ModuleUtils.HEADERS);
         Map<String, String> configurations = new HashMap<>();
-        for (BString key: originals.getKeys()) {
-            configurations.put(key.getValue().replaceAll("^\"|\"$", ""),
-                               originals.get(key).toString());
+        if (originals != null) {
+            for (BString key: originals.getKeys()) {
+                configurations.put(key.getValue().replaceAll("^\"|\"$", ""),
+                                   originals.get(key).toString());
+            }
         }
         Map<String, String> headers = new HashMap<>();
-        for (BString header: httpHeaders.getKeys()) {
-            headers.put(header.getValue(), httpHeaders.get(header).toString());
+        if (httpHeaders != null) {
+            for (BString header : httpHeaders.getKeys()) {
+                headers.put(header.getValue(), httpHeaders.get(header).toString());
+            }
         }
         SchemaRegistryClient registry = new CachedSchemaRegistryClient(baseUrl.getValue(), (int) identityMapCapacity,
                                                                        configurations, headers);
