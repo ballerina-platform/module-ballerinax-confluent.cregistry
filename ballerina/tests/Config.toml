@@ -1,8 +1,7 @@
-baseUrl = "http://localhost:9090/schema_registry"
+baseUrl = "http://localhost:9090/registry"
 identityMapCapacity = 1000
-subject = "avro_topic"
+subject = "new-subject"
 
 [originals]
-"schema.registry.url" = "mock://mock-client.confluent.cloud"
 
 [headers]

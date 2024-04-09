@@ -31,6 +31,7 @@ Client schemaRegistryClient = check new ({
 
 @test:Config {}
 public function testRegister() returns error? {
+    string subject = "test-topic";
     string schema = string `
         {
             "namespace": "example.avro",
@@ -46,15 +47,7 @@ public function testRegister() returns error? {
 }
 
 @test:Config {}
-public isolated function testInvalidSchemaRegister() returns error? {
-    ConnectionConfig ConnectionConfig = {
-        baseUrl,
-        identityMapCapacity,
-        originals,
-        headers
-    };
-    Client schemaRegistryClient = check new (ConnectionConfig);
-
+public function testInvalidSchemaRegister() returns error? {
     string schema = string `
         {
             "type": "record",
@@ -66,19 +59,11 @@ public isolated function testInvalidSchemaRegister() returns error? {
     if register !is int {
         test:assertEquals(register.detail().status, ());
         test:assertEquals(register.detail().errorCode, ());
-    } 
+    }
 }
 
 @test:Config {}
-public isolated function testGetSchemaById() returns error? {
-    ConnectionConfig ConnectionConfig = {
-        baseUrl,
-        identityMapCapacity,
-        originals,
-        headers
-    };
-    Client schemaRegistryClient = check new (ConnectionConfig);
-
+public function testGetSchemaById() returns error? {
     string schema = string `{"type":"record","name":"Student","namespace":"example.avro","fields":[{"name":"name","type":"string"},{"name":"favorite_color","type":["string","null"]}]}`;
 
     int registerResult = check schemaRegistryClient->register(subject, schema);
@@ -86,20 +71,11 @@ public isolated function testGetSchemaById() returns error? {
     test:assertEquals(getSchema.toJson(), schema.toJson());
 }
 
-@test:Config {
-    enable: false
-}
-public isolated function testGetInvalidSchemaById() returns error? {
-    ConnectionConfig ConnectionConfig = {
-        baseUrl,
-        identityMapCapacity,
-        originals,
-        headers
-    };
-    Client schemaRegistryClient = check new (ConnectionConfig);
+@test:Config {}
+public function testGetInvalidSchemaById() returns error? {
 
     string schema = string `{"type":"record","name":"Student","namespace":"example.avro","fields":[{"name":"name","type":"string"},{"name":"favorite_color","type":["string","null"]}]}`;
-    
+
     int registerResult = check schemaRegistryClient->register(subject, schema);
     string|error<ErrorDetails> getSchema = schemaRegistryClient->getSchemaById(registerResult * registerResult);
     test:assertTrue(getSchema is error<ErrorDetails>);
@@ -110,15 +86,7 @@ public isolated function testGetInvalidSchemaById() returns error? {
 }
 
 @test:Config {}
-public isolated function testGetId() returns error? {
-    ConnectionConfig ConnectionConfig = {
-        baseUrl,
-        identityMapCapacity,
-        originals,
-        headers
-    };
-    Client schemaRegistryClient = check new (ConnectionConfig);
-
+public function testGetId() returns error? {
     string schema = string `
         {
             "namespace": "example.avro",
@@ -136,7 +104,7 @@ public isolated function testGetId() returns error? {
 }
 
 @test:Config {}
-public isolated function testInvalidClientInitiation() returns error? {
+public function testInvalidClientInitiation() returns error? {
     map<json> originals = {};
     ConnectionConfig ConnectionConfig = {
         baseUrl: "",
@@ -144,9 +112,7 @@ public isolated function testInvalidClientInitiation() returns error? {
         originals,
         headers
     };
-
     Client schemaRegistryClient = check new (ConnectionConfig);
-
     string schema = string `
         {
             "namespace": "example.avro",
