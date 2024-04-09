@@ -23,7 +23,6 @@ import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BObject;
 import io.ballerina.runtime.api.values.BString;
 import io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient;
-import io.confluent.kafka.schemaregistry.client.MockSchemaRegistryClient;
 import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
 import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException;
 import org.apache.avro.Schema;
@@ -34,8 +33,6 @@ import java.util.Map;
 
 import static io.ballerina.lib.confluent.registry.ModuleUtils.NATIVE_CLIENT;
 import static io.ballerina.lib.confluent.registry.Utils.CLIENT_INVOCATION_ERROR;
-import static io.ballerina.lib.confluent.registry.Utils.MOCK_CLIENT;
-import static io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG;
 
 public final class CustomSchemaRegistryClient {
 
@@ -47,22 +44,20 @@ public final class CustomSchemaRegistryClient {
         BMap<BString, Object> originals = (BMap<BString, Object>) config.getMapValue(ModuleUtils.ORIGINALS);
         BMap<BString, Object> httpHeaders = (BMap<BString, Object>) config.getMapValue(ModuleUtils.HEADERS);
         Map<String, String> configurations = new HashMap<>();
-        for (BString key: originals.getKeys()) {
-            configurations.put(key.getValue().replaceAll("^\"|\"$", ""),
-                               originals.get(key).toString());
+        if (originals != null) {
+            for (BString key: originals.getKeys()) {
+                configurations.put(key.getValue().replaceAll("^\"|\"$", ""),
+                                   originals.get(key).toString());
+            }
         }
         Map<String, String> headers = new HashMap<>();
-        for (BString header: httpHeaders.getKeys()) {
-            headers.put(header.getValue(), httpHeaders.get(header).toString());
+        if (httpHeaders != null) {
+            for (BString header : httpHeaders.getKeys()) {
+                headers.put(header.getValue(), httpHeaders.get(header).toString());
+            }
         }
-        SchemaRegistryClient registry;
-        if (configurations.containsKey(SCHEMA_REGISTRY_URL_CONFIG) &&
-            configurations.get(SCHEMA_REGISTRY_URL_CONFIG).startsWith(MOCK_CLIENT)) {
-            registry = new MockSchemaRegistryClient();
-        } else {
-            registry = new CachedSchemaRegistryClient(baseUrl.getValue(), (int) identityMapCapacity,
-                                                      configurations, headers);
-        }
+        SchemaRegistryClient registry = new CachedSchemaRegistryClient(baseUrl.getValue(), (int) identityMapCapacity,
+                                                                       configurations, headers);
         registryClient.addNativeData(NATIVE_CLIENT, registry);
     }
 

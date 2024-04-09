@@ -35,7 +35,6 @@ public final class Utils {
     private Utils() {
     }
 
-    public static final String MOCK_CLIENT = "mock://";
     public static final String ERROR_TYPE = "Error";
     public static final String ERROR_DETAILS = "ErrorDetails";
     public static final String STATUS = "status";
