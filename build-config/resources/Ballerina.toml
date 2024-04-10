@@ -13,55 +13,55 @@ distribution = "2201.8.2"
 graalvmCompatible = true
 
 [[platform.java17.dependency]]
-path = "../native/build/libs/confluent.cregistry-native-0.1.0-SNAPSHOT.jar"
 groupId = "io.ballerina.lib"
 artifactId = "schema-registry-native"
-version = "0.1.0"
+version = "@toml.version@"
+path = "../native/build/libs/confluent.cregistry-native-@project.version@.jar"
 
 [[platform.java17.dependency]]
-path = "./lib/kafka-schema-registry-client-5.3.2.jar"
 groupId = "io.confluent"
 artifactId = "kafka-schema-registry-client"
-version = "5.3.2"
+version = "@kafka.schema.registry.version@"
+path = "./lib/kafka-schema-registry-client-@kafka.schema.registry.version@.jar"
 
 [[platform.java17.dependency]]
-path = "./lib/common-config-4.1.0.jar"
 groupId = "io.confluent"
 artifactId = "common-config"
-version = "4.1.0"
+version = "@common.config.version@"
+path = "./lib/common-config-@common.config.version@.jar"
 
 [[platform.java17.dependency]]
-path = "./lib/common-utils-5.3.0.jar"
 groupId = "io.confluent"
 artifactId = "common-utils"
-version = "5.3.0"
+version = "@common.utils.version@"
+path = "./lib/common-utils-@common.utils.version@.jar"
 
 [[platform.java17.dependency]]
-path = "./lib/kafka-clients-0.11.0.1.jar"
 groupId = "org.apache.kafka"
 artifactId = "kafka-clients"
-version = "0.11.0.1"
+version = "@kafka.clients.version@"
+path = "./lib/kafka-clients-@kafka.clients.version@.jar"
 
 [[platform.java17.dependency]]
-path = "./lib/avro-1.11.3.jar"
 groupId = "org.apache.avro"
 artifactId = "avro"
-version = "1.11.3"
+version = "@avro.version@"
+path = "./lib/avro-@avro.version@.jar"
 
 [[platform.java17.dependency]]
 groupId = "com.fasterxml.jackson.core"
 artifactId = "jackson-core"
-version = "2.17.0"
-path = "./lib/jackson-core-2.17.0.jar"
+version = "@jackson.version@"
+path = "./lib/jackson-core-@jackson.version@.jar"
 
 [[platform.java11.dependency]]
 groupId = "com.fasterxml.jackson.core"
 artifactId = "jackson-annotations"
-version = "2.17.0"
-path = "./lib/jackson-annotations-2.17.0.jar"
+version = "@jackson.version@"
+path = "./lib/jackson-annotations-@jackson.version@.jar"
 
 [[platform.java11.dependency]]
 groupId = "com.fasterxml.jackson.core"
 artifactId = "jackson-databind"
-version = "2.17.0"
-path = "./lib/jackson-databind-2.17.0.jar"
+version = "@jackson.version@"
+path = "./lib/jackson-databind-@jackson.version@.jar"
