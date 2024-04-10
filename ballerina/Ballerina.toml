@@ -7,7 +7,7 @@ export=["confluent.cregistry"]
 keywords = ["confluent", "schema_registry", "avro", "serdes"]
 repository = "https://github.com/ballerina-platform/module-ballerinax-confluent.cregistry"
 license = ["Apache-2.0"]
-distribution = "2201.8.2"
+distribution = "2201.8.6"
 
 [platform.java17]
 graalvmCompatible = true
@@ -27,8 +27,8 @@ path = "./lib/kafka-schema-registry-client-5.3.2.jar"
 [[platform.java17.dependency]]
 groupId = "io.confluent"
 artifactId = "common-config"
-version = "4.1.0"
-path = "./lib/common-config-4.1.0.jar"
+version = "5.3.0"
+path = "./lib/common-config-5.3.0.jar"
 
 [[platform.java17.dependency]]
 groupId = "io.confluent"
