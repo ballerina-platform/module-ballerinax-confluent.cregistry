@@ -7,7 +7,7 @@ export=["confluent.cregistry"]
 keywords = ["confluent", "schema_registry", "avro", "serdes"]
 repository = "https://github.com/ballerina-platform/module-ballerinax-confluent.cregistry"
 license = ["Apache-2.0"]
-distribution = "2201.8.2"
+distribution = "2201.8.6"
 
 [platform.java17]
 graalvmCompatible = true
