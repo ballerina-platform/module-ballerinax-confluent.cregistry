@@ -42,7 +42,7 @@ plugins {
 }
 
 def projectName = 'confluent.cregistry'
-rootProject.name = "ballerina ${projectName}"
+rootProject.name = "ballerinax-${projectName}"
 
 include ":checkstyle"
 include ":${projectName}-native"
