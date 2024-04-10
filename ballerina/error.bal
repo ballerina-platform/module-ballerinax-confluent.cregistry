@@ -14,9 +14,14 @@
 // specific language governing permissions and limitations
 // under the License.
 
+# The error details type for the Ballerina Confluent Schema Registry module.
+#
+# + status - The HTTP status code for the error
+# + errorCode - The error code for the error
 public type ErrorDetails record {|
     int status?;
     int errorCode?;
 |};
 
+# Represents any error related to Ballerina Confluent Schema Registry module.
 public type Error distinct error<ErrorDetails>;
