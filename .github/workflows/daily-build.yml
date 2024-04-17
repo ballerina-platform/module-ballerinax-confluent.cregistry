@@ -12,3 +12,5 @@ jobs:
     secrets: inherit
     with:
       repo-name: module-ballerinax-confluent.cregistry
+      additional-build-flags: "-x :confluent.cregistry-examples:build"
+      additional-test-flags: "-x :confluent.cregistry-examples:build"
