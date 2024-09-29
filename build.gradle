@@ -63,19 +63,6 @@ allprojects {
     }
 }
 
-subprojects {
-    configurations {
-        ballerinaStdLibs
-        jbalTools
-    }
-    dependencies {
-        /* JBallerina Tools */
-        jbalTools ("org.ballerinalang:jballerina-tools:${ballerinaLangVersion}") {
-            transitive = false
-        }
-    }
-}
-
 task build {
     dependsOn(":confluent.cregistry-native:build")
     dependsOn(":confluent.cregistry-ballerina:build")
