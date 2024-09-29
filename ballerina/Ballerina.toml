@@ -1,13 +1,13 @@
 [package]
 org = "ballerinax"
 name = "confluent.cregistry"
-version = "0.1.2"
+version = "0.2.0"
 authors = ["Ballerina"]
 export=["confluent.cregistry"]
 keywords = ["confluent", "schema_registry", "avro", "serdes"]
 repository = "https://github.com/ballerina-platform/module-ballerinax-confluent.cregistry"
 license = ["Apache-2.0"]
-distribution = "2201.8.6"
+distribution = "2201.10.0"
 
 [platform.java17]
 graalvmCompatible = true
@@ -15,8 +15,8 @@ graalvmCompatible = true
 [[platform.java17.dependency]]
 groupId = "io.ballerina.lib"
 artifactId = "schema-registry-native"
-version = "0.1.2"
-path = "../native/build/libs/confluent.cregistry-native-0.1.2-SNAPSHOT.jar"
+version = "0.2.0"
+path = "../native/build/libs/confluent.cregistry-native-0.2.0-SNAPSHOT.jar"
 
 [[platform.java17.dependency]]
 groupId = "io.confluent"
