@@ -39,14 +39,14 @@ path = "./lib/common-utils-7.8.0.jar"
 [[platform.java17.dependency]]
 groupId = "org.apache.kafka"
 artifactId = "kafka-clients"
-version = "3.7.0"
-path = "./lib/kafka-clients-3.7.0.jar"
+version = "3.7.2"
+path = "./lib/kafka-clients-3.7.2.jar"
 
 [[platform.java17.dependency]]
 groupId = "org.apache.avro"
 artifactId = "avro"
-version = "1.11.3"
-path = "./lib/avro-1.11.3.jar"
+version = "1.11.4"
+path = "./lib/avro-1.11.4.jar"
 
 [[platform.java17.dependency]]
 groupId = "com.fasterxml.jackson.core"
