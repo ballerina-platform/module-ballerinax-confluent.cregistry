@@ -86,6 +86,9 @@ dependencies {
     externalJars(group: 'org.apache.avro', name: 'avro', version: "${avroVersion}") {
         transitive = false
     }
+    externalJars(group: 'com.google.guava', name: 'guava', version: '32.0.1-jre') {
+        transitive = false
+    }
 }
 
 task updateTomlFiles {

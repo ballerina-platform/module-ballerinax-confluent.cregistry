@@ -45,6 +45,7 @@ dependencies {
     implementation group: 'io.confluent', name: 'kafka-schema-registry-client', version: "${kafkaSchemaRegistryVersion}"
     implementation group: 'io.confluent', name: 'common-config', version: "${commonConfigVersion}"
     implementation group: 'io.confluent', name: 'common-utils', version: "${commonUtilsVersion}"
+    implementation group: 'com.google.guava', name: 'guava', version: '32.0.1-jre'
 }
 
 tasks.withType(JavaCompile) {

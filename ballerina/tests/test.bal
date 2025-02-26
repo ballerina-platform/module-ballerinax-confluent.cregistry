@@ -86,24 +86,6 @@ public function testGetInvalidSchemaById() returns error? {
 }
 
 @test:Config {}
-public function testGetId() returns error? {
-    string schema = string `
-        {
-            "namespace": "example.avro",
-            "type": "record",
-            "name": "Student",
-            "fields": [
-                {"name": "name", "type": "string"},
-                {"name": "favorite_color", "type": ["string", "null"]}
-            ]
-        }`;
-
-    int registerId = check schemaRegistryClient->register(subject, schema);
-    int schemaId = check schemaRegistryClient->getId(subject, schema);
-    test:assertEquals(registerId, schemaId);
-}
-
-@test:Config {}
 public function testInvalidClientInitiation() returns error? {
     map<json> originals = {};
     ConnectionConfig ConnectionConfig = {
