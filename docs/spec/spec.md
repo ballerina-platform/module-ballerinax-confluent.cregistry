@@ -25,9 +25,7 @@ The conforming implementation of the specification is released and included in t
     * 3.1 [The `getSchemaById` API](#31-the-getschemabyid-api)
 4. [Schema registration](#4-schema-registration)
     * 4.1 [The `register` API](#41-the-register-api)
-5. [Fetch a schema ID](#5-fetch-a-schema-id)
-    * 5.1 [The `getId` API](#51-the-getid-api)
-6. [The `cregistry:Error` Type](#6-the-cregistryerror-type)
+5. [The `cregistry:Error` Type](#6-the-cregistryerror-type)
 
 ## 1. Overview
 
@@ -83,19 +81,7 @@ The `register` method registers a new schema to the registry.
 int schemaId = check registry->register("subject", "schema");
 ```
 
-## 5. Fetch a schema ID
-
-The Confluent Schema Registry module provides a method to fetch a schema ID from the registry.
-
-### 5.1 The `getId` API
-
-The `getId` method retrieves a schema ID from the registry.
-
-```ballerina
-int schemaId = check registry.getId(subject, schema);
-```
-
-## 6. The `cregistry:Error` Type
+## 5. The `cregistry:Error` Type
 
 The `cregistry:Error` type represents all the errors related to the Confluent Schema Registry module. This is a subtype of the Ballerina `error<ErrorDetails>` type.
 
