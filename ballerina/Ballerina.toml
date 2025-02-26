@@ -54,14 +54,20 @@ artifactId = "jackson-core"
 version = "2.18.1"
 path = "./lib/jackson-core-2.18.1.jar"
 
-[[platform.java11.dependency]]
+[[platform.java17.dependency]]
 groupId = "com.fasterxml.jackson.core"
 artifactId = "jackson-annotations"
 version = "2.18.1"
 path = "./lib/jackson-annotations-2.18.1.jar"
 
-[[platform.java11.dependency]]
+[[platform.java17.dependency]]
 groupId = "com.fasterxml.jackson.core"
 artifactId = "jackson-databind"
 version = "2.18.1"
 path = "./lib/jackson-databind-2.18.1.jar"
+
+[[platform.java17.dependency]]
+groupId = "com.google.guava"
+artifactId = "guava"
+version = "32.0.1-jre"
+path = "./lib/guava-32.0.1-jre.jar"

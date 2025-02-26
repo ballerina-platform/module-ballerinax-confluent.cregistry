@@ -87,6 +87,9 @@ dependencies {
     externalJars(group: 'org.apache.avro', name: 'avro', version: "${avroVersion}") {
         transitive = false
     }
+    externalJars(group: 'com.google.guava', name: 'guava', version: "${guavaVersion}") {
+        transitive = false
+    }
 }
 
 task updateTomlFiles {
@@ -100,6 +103,7 @@ task updateTomlFiles {
         newBallerinaToml = newBallerinaToml.replace("@common.config.version@", commonConfigVersion)
         newBallerinaToml = newBallerinaToml.replace("@common.utils.version@", commonUtilsVersion)
         newBallerinaToml = newBallerinaToml.replace("@kafka.clients.version@", kafkaClientVersion)
+        newBallerinaToml = newBallerinaToml.replace("@guava.version@", guavaVersion)
         ballerinaTomlFile.text = newBallerinaToml
     }
 }
