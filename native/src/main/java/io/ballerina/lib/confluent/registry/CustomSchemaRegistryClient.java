@@ -22,6 +22,7 @@ import io.ballerina.runtime.api.utils.StringUtils;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BObject;
 import io.ballerina.runtime.api.values.BString;
+import io.confluent.kafka.schemaregistry.ParsedSchema;
 import io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient;
 import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
 import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException;
@@ -30,11 +31,14 @@ import org.apache.avro.Schema;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static io.ballerina.lib.confluent.registry.ModuleUtils.NATIVE_CLIENT;
 import static io.ballerina.lib.confluent.registry.Utils.CLIENT_INVOCATION_ERROR;
 
 public final class CustomSchemaRegistryClient {
+
+    public static final String AVRO = "AVRO";
 
     private CustomSchemaRegistryClient() {}
 
@@ -66,18 +70,8 @@ public final class CustomSchemaRegistryClient {
         try {
             Schema.Parser parser = new Schema.Parser();
             Schema avroSchema = parser.parse(schema.getValue());
-            return schemaRegistryClient.register(subject.getValue(), avroSchema);
-        } catch (Exception e) {
-            return Utils.createError(CLIENT_INVOCATION_ERROR, e);
-        }
-    }
-
-    public static Object getId(BObject registryClient, BString subject, BString schema) {
-        SchemaRegistryClient schemaRegistryClient = (SchemaRegistryClient) registryClient.getNativeData(NATIVE_CLIENT);
-        try {
-            Schema.Parser parser = new Schema.Parser();
-            Schema avroSchema = parser.parse(schema.getValue());
-            return schemaRegistryClient.getId(subject.getValue(), avroSchema);
+            ParsedSchema parsedSchema = getParsedSchema(schemaRegistryClient, avroSchema);
+            return schemaRegistryClient.register(subject.getValue(), parsedSchema);
         } catch (Exception e) {
             return Utils.createError(CLIENT_INVOCATION_ERROR, e);
         }
@@ -86,9 +80,19 @@ public final class CustomSchemaRegistryClient {
     public static Object getSchemaById(BObject registryClient, int i) {
         SchemaRegistryClient schemaRegistryClient = (SchemaRegistryClient) registryClient.getNativeData(NATIVE_CLIENT);
         try {
-            return StringUtils.fromString(schemaRegistryClient.getById(i).toString());
+            return StringUtils.fromString(schemaRegistryClient.getSchemaById(i).canonicalString());
         } catch (IOException | RestClientException e) {
             return Utils.createError(CLIENT_INVOCATION_ERROR, e);
         }
+    }
+
+    private static ParsedSchema getParsedSchema(SchemaRegistryClient schemaRegistryClient,
+                                                          Schema avroSchema) {
+        Optional<ParsedSchema> parsedSchema = schemaRegistryClient.parseSchema(AVRO,
+                avroSchema.toString(), null);
+        if (parsedSchema.isEmpty()) {
+            throw Utils.createError(CLIENT_INVOCATION_ERROR, new Throwable("Error occurred while parsing the schema"));
+        }
+        return parsedSchema.get();
     }
 }
