@@ -47,13 +47,4 @@ public isolated client class Client {
     remote isolated function getSchemaById(int id) returns string|Error = @java:Method {
         'class: "io.ballerina.lib.confluent.registry.CustomSchemaRegistryClient"
     } external;
-
-    # Retrieves the ID for the given subject and schema from the schema registry client.
-    # 
-    # + subject -  The subject of the schema
-    # + schema - The Avro schema
-    # + return - Returns the ID of the schema if found, or an `cregistry:Error` if an error occurs
-    remote isolated function getId(string subject, string schema) returns int|Error = @java:Method {
-        'class: "io.ballerina.lib.confluent.registry.CustomSchemaRegistryClient"
-    } external;
 }
