@@ -25,6 +25,21 @@ import ballerinax/confluent.cregistry;
 
 ### Step 2: Instantiate a new connector
 
+Config.toml file
+``` toml
+baseUrl = "<SCHEMA_REGISTRY_URL>"
+identityMapCapacity = <IDENTITY_MAP_CAPACITY>
+
+[originals]
+"basic.auth.credentials.source"="USER_INFO"
+"basic.auth.user.info"="<API_KEY>:<API_SECRET>"
+"bootstrap.servers"="<BOOTSTRAP_SERVERS>"
+
+[headers]
+"X-Schema-Provider"="<VALUE1>"
+"User-Agent"="<VALUE2>"
+```
+
 ```ballerina
 configurable string baseUrl = ?;
 configurable int identityMapCapacity = ?;
@@ -138,6 +153,96 @@ Execute the commands below to build from the source.
 
    ```bash
    ./gradlew clean build -PpublishToCentral=true
+   ```
+
+## Examples
+
+1. Register a schema in the schema registry and retrieve it by ID:
+
+   ```ballerina
+   import ballerinax/confluent.cregistry;
+
+   configurable string baseUrl = ?;
+   configurable int identityMapCapacity = ?;
+   configurable map<anydata> & readonly originals = ?;
+   configurable map<string> & readonly headers = ?;
+
+   public function main() returns error? {
+      cregistry:Client schemaRegistryClient = check new (
+         baseUrl = baseUrl,
+         identityMapCapacity = identityMapCapacity,
+         originals = originals,
+         headers = headers
+      );
+      string schema = string `
+         {
+               "namespace": "example.avro",
+               "type": "record",
+               "name": "Student",
+               "fields": [
+                  {"name": "name", "type": "string"},
+                  {"name": "favorite_color", "type": ["string", "null"]}
+               ]
+         }`;
+      int schemaID = check schemaRegistryClient->register("student", schema);
+
+      string schemaResp = check schemaRegistryClient->getSchemaById(schemaID);
+   }
+   ```
+
+2. Producing Avro Messages to Kafka with Schema Registry:
+
+   ``` ballerina
+   import ballerinax/kafka;
+
+   type Student record {
+      string name;
+      string favorite_color;
+   };
+
+   public function main() returns error? {
+      string valueSchema = string `{
+               "namespace": "example.avro",
+               "type": "record",
+               "name": "Student",
+               "fields": [
+                  {"name": "name", "type": "string"},
+                  {"name": "favorite_color", "type": ["string", "null"]}
+               ]
+         }`;
+      string keySchema = string `{    
+               "type": "string",
+               "name" : "stringValue", 
+               "namespace": "data"
+         }`;
+      kafka:ProducerConfiguration config = {
+         compressionType: kafka:COMPRESSION_SNAPPY,
+         auth: {
+               username: "<USERNAME>", 
+               password: "<PASSWORD>"
+         },
+         securityProtocol: kafka:PROTOCOL_SASL_SSL,
+         keySerializerType: kafka:SER_AVRO,
+         valueSerializerType: kafka:SER_AVRO,
+         keySchema: keySchema,
+         valueSchema: valueSchema,
+         schemaRegistryConfig: {
+               "baseUrl":  baseUrl,
+               "originals": originals,
+               "headers": headers
+         }
+      };
+      kafka:Producer producer = check new ("<BOOTSTRAP_SERVERS>", config);
+
+      Student student = {
+         name: "John Doe",
+         favorite_color: "Red"
+      };
+      check producer->send({
+         topic: "students",
+         value: student
+      });
+   }
    ```
 
 ## Contributing to Ballerina
