@@ -39,6 +39,11 @@ import static io.ballerina.lib.confluent.registry.Utils.CLIENT_INVOCATION_ERROR;
 public final class CustomSchemaRegistryClient {
 
     public static final String AVRO = "AVRO";
+    public static final BString BASE_URL = StringUtils.fromString("baseUrl");
+    public static final BString IDENTITY_MAP_CAPACITY = StringUtils.fromString("identityMapCapacity");
+    public static final BString ORIGINALS = StringUtils.fromString("originals");
+    public static final BString HEADERS = StringUtils.fromString("headers");
+    public static final String NATIVE_CLIENT = "client";
 
     private CustomSchemaRegistryClient() {}
 
