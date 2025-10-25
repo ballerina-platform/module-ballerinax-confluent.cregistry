@@ -18,6 +18,8 @@ import ballerina/test;
 
 configurable string subject = ?;
 configurable string baseUrl = ?;
+configurable string apiKey = "mock-api-key";
+configurable string apiSecret = "mock-api-secret";
 configurable int identityMapCapacity = ?;
 configurable map<anydata> originals = ?;
 configurable map<string> headers = ?;
@@ -28,6 +30,34 @@ Client schemaRegistryClient = check new ({
     originals,
     headers
 });
+
+@test:Config {
+    groups: ["a"]
+}
+public function testAuthConfigs() returns error? {
+    Client regClient = check new ({
+        baseUrl,
+        auth: {
+            apiKey, 
+            apiSecret
+        },
+        identityMapCapacity,
+        headers
+    });
+    string subject = "test-topic";
+    string schema = string `
+        {
+            "namespace": "example.avro",
+            "type": "record",
+            "name": "Student",
+            "fields": [
+                {"name": "name", "type": "string"},
+                {"name": "favorite_color", "type": ["string", "null"]}
+            ]
+        }`;
+
+    _ = check regClient->register(subject, schema);
+}
 
 @test:Config {}
 public function testRegister() returns error? {
