@@ -19,7 +19,6 @@
 package io.ballerina.lib.confluent.registry;
 
 import io.ballerina.runtime.api.utils.StringUtils;
-import io.ballerina.runtime.api.utils.TypeUtils;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BObject;
 import io.ballerina.runtime.api.values.BString;
@@ -61,7 +60,7 @@ public final class CustomSchemaRegistryClient {
         BMap<BString, Object> httpHeaders = (BMap<BString, Object>) config.getMapValue(HEADERS);
         BMap<BString, Object> authConfig = (BMap<BString, Object>) config.getMapValue(AUTH_CONFIG);
         Map<String, String> configurations = new HashMap<>();
-        if (TypeUtils.getType(authConfig).getCachedReferredType().getName().equals(CREDENTIALS_CONFIG)) {
+        if (authConfig != null && authConfig.getType().getName().contains(CREDENTIALS_CONFIG)) {
             BString apiKey = (BString) authConfig.get(API_KEY);
             BString apiSecret = (BString) authConfig.get(API_SECRET);
             configurations.put(BASIC_AUTH_CREDENTIALS_SOURCE, USER_INFO);
