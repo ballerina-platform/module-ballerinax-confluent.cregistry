@@ -19,6 +19,7 @@
 package io.ballerina.lib.confluent.registry;
 
 import io.ballerina.runtime.api.utils.StringUtils;
+import io.ballerina.runtime.api.utils.TypeUtils;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BObject;
 import io.ballerina.runtime.api.values.BString;
@@ -33,26 +34,39 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static io.ballerina.lib.confluent.registry.ModuleUtils.NATIVE_CLIENT;
 import static io.ballerina.lib.confluent.registry.Utils.CLIENT_INVOCATION_ERROR;
 
 public final class CustomSchemaRegistryClient {
 
     public static final String AVRO = "AVRO";
+    public static final BString AUTH_CONFIG = StringUtils.fromString("auth");
+    public static final String CREDENTIALS_CONFIG = "CredentialsConfig";
+    public static final BString API_KEY = StringUtils.fromString("apiKey");
+    public static final BString API_SECRET = StringUtils.fromString("apiSecret");
+    public static final String BASIC_AUTH_CREDENTIALS_SOURCE = "basic.auth.credentials.source";
+    public static final String SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO = "schema.registry.basic.auth.user.info";
     public static final BString BASE_URL = StringUtils.fromString("baseUrl");
     public static final BString IDENTITY_MAP_CAPACITY = StringUtils.fromString("identityMapCapacity");
     public static final BString ORIGINALS = StringUtils.fromString("originals");
     public static final BString HEADERS = StringUtils.fromString("headers");
     public static final String NATIVE_CLIENT = "client";
+    public static final String USER_INFO = "USER_INFO";
 
     private CustomSchemaRegistryClient() {}
 
     public static void generateSchemaRegistryClient(BObject registryClient, BMap<BString, Object> config) {
-        BString baseUrl = (BString) config.get(ModuleUtils.BASE_URL);
-        long identityMapCapacity = config.getIntValue(ModuleUtils.IDENTITY_MAP_CAPACITY);
-        BMap<BString, Object> originals = (BMap<BString, Object>) config.getMapValue(ModuleUtils.ORIGINALS);
-        BMap<BString, Object> httpHeaders = (BMap<BString, Object>) config.getMapValue(ModuleUtils.HEADERS);
+        BString baseUrl = (BString) config.get(BASE_URL);
+        long identityMapCapacity = config.getIntValue(IDENTITY_MAP_CAPACITY);
+        BMap<BString, Object> originals = (BMap<BString, Object>) config.getMapValue(ORIGINALS);
+        BMap<BString, Object> httpHeaders = (BMap<BString, Object>) config.getMapValue(HEADERS);
+        BMap<BString, Object> authConfig = (BMap<BString, Object>) config.getMapValue(AUTH_CONFIG);
         Map<String, String> configurations = new HashMap<>();
+        if (TypeUtils.getType(authConfig).getCachedReferredType().getName().equals(CREDENTIALS_CONFIG)) {
+            BString apiKey = (BString) authConfig.get(API_KEY);
+            BString apiSecret = (BString) authConfig.get(API_SECRET);
+            configurations.put(BASIC_AUTH_CREDENTIALS_SOURCE, USER_INFO);
+            configurations.put(SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO, apiKey.getValue() + ":" + apiSecret.getValue());
+        }
         if (originals != null) {
             for (BString key: originals.getKeys()) {
                 configurations.put(key.getValue().replaceAll("^\"|\"$", ""),
