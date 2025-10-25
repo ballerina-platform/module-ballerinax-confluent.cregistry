@@ -28,16 +28,16 @@ import io.ballerina.runtime.api.Module;
  */
 public final class ModuleUtils {
 
+    private static Module module;
+
     private ModuleUtils() {}
 
-    private static Module avroModule = null;
-
     public static Module getModule() {
-        return avroModule;
+        return module;
     }
 
     public static void setModule(Environment env) {
-        avroModule = env.getCurrentModule();
+        module = env.getCurrentModule();
     }
 
 }
