@@ -18,11 +18,25 @@
 #
 # + baseUrl - The base URL of the schema registry endpoint
 # + identityMapCapacity - Capacity of the schema ID map for a particular subject
+# + auth - Authentication configuration for the schema registry
 # + originals - Connection configurations required to integrate with the schema registry
 # + headers - Custom headers to be included in the requests
 public type ConnectionConfig record {|
     string baseUrl;
     int identityMapCapacity = 1000;
-    map<anydata> originals?;
+    AuthConfig auth?;
     map<string> headers?;
+    map<anydata> originals?;
+|};
+
+# Authentication configurations for schema registry
+public type AuthConfig CredentialsConfig;
+
+# API credentials based authentication
+#
+# + apiKey - The API key for authentication
+# + apiSecret - The API secret for authentication
+public type CredentialsConfig record {|
+    string apiKey;
+    string apiSecret;
 |};
