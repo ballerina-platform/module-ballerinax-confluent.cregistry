@@ -21,11 +21,10 @@ string baseUrl = "http://localhost:8081";
 string apiKey = "admin";
 string apiSecret = "admin-secret";
 int identityMapCapacity = 1000;
-map<anydata> originals = {};
-map<string> headers = {};
 string sslBaseUrl = "https://localhost:8082";
 string trustStorePath = "./tests/resources/certs/truststore.jks";
 string trustStorePassword = "changeit";
+
 Client schemaRegistryClient = check new ({
         baseUrl: sslBaseUrl,
         auth: { apiKey, apiSecret },
@@ -37,23 +36,23 @@ Client schemaRegistryClient = check new ({
                 password: trustStorePassword 
             },
             verifyHostName: false
-        },
-        headers
+        }
     });
 
-@test:Config { groups: ["ssl" ] }
-public function testSSLRegister() returns error? {
-
+@test:Config {}
+public function testSslWithSchemaRegistry() returns error? {
     Client sslClient = check new ({
         baseUrl: sslBaseUrl,
-        auth: { apiKey, apiSecret },
+        auth: { 
+            apiKey, 
+            apiSecret 
+        },
         identityMapCapacity,
         secureSocket: {
             enable: true,
             cert: { path: trustStorePath, password: trustStorePassword },
             verifyHostName: false
-        },
-        headers
+        }
     });
     string subject = "test-ssl-topic";
     string schema = string `{"namespace":"example.avro","type":"record","name":"Student","fields":[{"name":"name","type":"string"},{"name":"favorite_color","type":["string","null"]}]}`;
@@ -68,8 +67,7 @@ public function testAuthConfigs() returns error? {
             apiKey, 
             apiSecret
         },
-        identityMapCapacity,
-        headers
+        identityMapCapacity
     });
     
     string subject = "test-auth-topic";
@@ -131,9 +129,7 @@ public function testGetSchemaById() returns error? {
 
 @test:Config {}
 public function testGetInvalidSchemaById() returns error? {
-
     string schema = string `{"type":"record","name":"Student","namespace":"example.avro","fields":[{"name":"name","type":"string"},{"name":"favorite_color","type":["string","null"]}]}`;
-
     _ = check schemaRegistryClient->register(subject, schema);
     int invalidId = 999999;
     string|error<ErrorDetails> getSchema = schemaRegistryClient->getSchemaById(invalidId);
@@ -145,16 +141,10 @@ public function testGetInvalidSchemaById() returns error? {
 
 @test:Config {}
 public function testInvalidClientInitiation() returns error? {
-    map<json> originals = {};
     ConnectionConfig ConnectionConfig = {
         baseUrl: "",
-        auth: {
-            apiKey, 
-            apiSecret
-        },
         identityMapCapacity,
-        originals,
-        headers
+        originals: {}
     };
     Client schemaRegistryClient = check new (ConnectionConfig);
     string schema = string `
