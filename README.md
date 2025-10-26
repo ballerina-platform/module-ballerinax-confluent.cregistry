@@ -25,33 +25,23 @@ import ballerinax/confluent.cregistry;
 
 ### Step 2: Instantiate a new connector
 
-Config.toml file
-``` toml
-baseUrl = "<SCHEMA_REGISTRY_URL>"
-identityMapCapacity = <IDENTITY_MAP_CAPACITY>
-
-[originals]
-"basic.auth.credentials.source"="USER_INFO"
-"basic.auth.user.info"="<API_KEY>:<API_SECRET>"
-"bootstrap.servers"="<BOOTSTRAP_SERVERS>"
-
-[headers]
-"X-Schema-Provider"="<VALUE1>"
-"User-Agent"="<VALUE2>"
-```
-
 ```ballerina
-configurable string baseUrl = ?;
-configurable int identityMapCapacity = ?;
-configurable map<anydata> originals = ?;
-configurable map<string> headers = ?;
+configurable string schemaRegistryUrl = ?;
+configurable string apiKey = ?;
+configurable string apiSecret = ?;
+configurable string truststorePath = ?;
+configurable string truststorePassword = ?;
 
-cregistry:Client schemaRegistryClient = check new ({
-    baseUrl,
-    identityMapCapacity,
-    originals,
-    headers
-});
+cregistry:Client schemaRegistryClient = check new (
+    baseUrl = schemaRegistryUrl,
+    originals = {
+      "basic.auth.credentials.source": "USER_INFO",
+      "basic.auth.user.info": string `${apiKey}:${apiSecret}`
+      // Truststore configurations are optional when the schema registry's HTTP(S) endpoint is secured with a publicly trusted certificate.
+      "schema.registry.ssl.truststore.location": truststorePath,
+      "schema.registry.ssl.truststore.password": truststorePassword,
+    }
+);
 ```
 
 ### Step 3: Invoke the connector operation
