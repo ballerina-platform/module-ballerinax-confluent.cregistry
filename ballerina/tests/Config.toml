@@ -1,7 +1,0 @@
-baseUrl = "http://localhost:9090/registry"
-identityMapCapacity = 1000
-subject = "new-subject"
-
-[originals]
-
-[headers]
