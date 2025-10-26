@@ -29,12 +29,17 @@ import ballerinax/confluent.cregistry;
 configurable string schemaRegistryUrl = ?;
 configurable string apiKey = ?;
 configurable string apiSecret = ?;
+configurable string truststorePath = ?;
+configurable string truststorePassword = ?;
 
 cregistry:Client schemaRegistryClient = check new (
     baseUrl = schemaRegistryUrl,
     originals = {
       "basic.auth.credentials.source": "USER_INFO",
       "basic.auth.user.info": string `${apiKey}:${apiSecret}`
+      // Truststore configurations are optional if the schema-registry HTTP(s) endpoint uses a well-known certificate
+      "schema.registry.ssl.truststore.location": truststorePath,
+      "schema.registry.ssl.truststore.password": truststorePassword,
     }
 );
 ```
