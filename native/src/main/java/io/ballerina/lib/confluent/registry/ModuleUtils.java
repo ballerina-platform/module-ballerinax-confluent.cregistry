@@ -20,8 +20,6 @@ package io.ballerina.lib.confluent.registry;
 
 import io.ballerina.runtime.api.Environment;
 import io.ballerina.runtime.api.Module;
-import io.ballerina.runtime.api.utils.StringUtils;
-import io.ballerina.runtime.api.values.BString;
 
 /**
  * Utility functions of the Schema Registry module.
@@ -30,21 +28,16 @@ import io.ballerina.runtime.api.values.BString;
  */
 public final class ModuleUtils {
 
-    private ModuleUtils() {}
-    public static final BString BASE_URL = StringUtils.fromString("baseUrl");
-    public static final BString IDENTITY_MAP_CAPACITY = StringUtils.fromString("identityMapCapacity");
-    public static final BString ORIGINALS = StringUtils.fromString("originals");
-    public static final BString HEADERS = StringUtils.fromString("headers");
-    public static final String NATIVE_CLIENT = "client";
+    private static Module module;
 
-    private static Module avroModule = null;
+    private ModuleUtils() {}
 
     public static Module getModule() {
-        return avroModule;
+        return module;
     }
 
     public static void setModule(Environment env) {
-        avroModule = env.getCurrentModule();
+        module = env.getCurrentModule();
     }
 
 }

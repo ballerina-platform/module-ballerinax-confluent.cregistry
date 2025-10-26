@@ -3,7 +3,6 @@ org = "ballerinax"
 name = "confluent.cregistry"
 version = "@toml.version@"
 authors = ["Ballerina"]
-export=["confluent.cregistry"]
 keywords = ["confluent", "schema_registry", "avro", "serdes"]
 repository = "https://github.com/ballerina-platform/module-ballerinax-confluent.cregistry"
 license = ["Apache-2.0"]
