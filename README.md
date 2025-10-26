@@ -37,7 +37,7 @@ cregistry:Client schemaRegistryClient = check new (
     originals = {
       "basic.auth.credentials.source": "USER_INFO",
       "basic.auth.user.info": string `${apiKey}:${apiSecret}`
-      // Truststore configurations are optional if the schema-registry HTTP(s) endpoint uses a well-known certificate
+      // Truststore configurations are optional when the schema registry's HTTP(S) endpoint is secured with a publicly trusted certificate.
       "schema.registry.ssl.truststore.location": truststorePath,
       "schema.registry.ssl.truststore.password": truststorePassword,
     }
