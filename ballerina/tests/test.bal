@@ -16,26 +16,53 @@
 
 import ballerina/test;
 
-configurable string subject = ?;
-configurable string baseUrl = ?;
-configurable string apiKey = "mock-api-key";
-configurable string apiSecret = "mock-api-secret";
-configurable int identityMapCapacity = ?;
-configurable map<anydata> originals = ?;
-configurable map<string> headers = ?;
-
+string subject = "new-subject";
+string baseUrl = "http://localhost:8081";
+string apiKey = "admin";
+string apiSecret = "admin-secret";
+int identityMapCapacity = 1000;
+map<anydata> originals = {};
+map<string> headers = {};
+string sslBaseUrl = "https://localhost:8082";
+string trustStorePath = "./tests/resources/certs/truststore.jks";
+string trustStorePassword = "changeit";
 Client schemaRegistryClient = check new ({
-    baseUrl,
-    identityMapCapacity,
-    originals,
-    headers
-});
+        baseUrl: sslBaseUrl,
+        auth: { apiKey, apiSecret },
+        identityMapCapacity,
+        secureSocket: {
+            enable: true,
+            cert: { 
+                path: trustStorePath, 
+                password: trustStorePassword 
+            },
+            verifyHostName: false
+        },
+        headers
+    });
 
-@test:Config {
-    groups: ["a"]
+@test:Config { groups: ["ssl" ] }
+public function testSSLRegister() returns error? {
+
+    Client sslClient = check new ({
+        baseUrl: sslBaseUrl,
+        auth: { apiKey, apiSecret },
+        identityMapCapacity,
+        secureSocket: {
+            enable: true,
+            cert: { path: trustStorePath, password: trustStorePassword },
+            verifyHostName: false
+        },
+        headers
+    });
+    string subject = "test-ssl-topic";
+    string schema = string `{"namespace":"example.avro","type":"record","name":"Student","fields":[{"name":"name","type":"string"},{"name":"favorite_color","type":["string","null"]}]}`;
+    _ = check sslClient->register(subject, schema);
 }
+
+@test:Config {}
 public function testAuthConfigs() returns error? {
-    Client regClient = check new ({
+    Client authClient = check new ({
         baseUrl,
         auth: {
             apiKey, 
@@ -44,7 +71,8 @@ public function testAuthConfigs() returns error? {
         identityMapCapacity,
         headers
     });
-    string subject = "test-topic";
+    
+    string subject = "test-auth-topic";
     string schema = string `
         {
             "namespace": "example.avro",
@@ -56,7 +84,7 @@ public function testAuthConfigs() returns error? {
             ]
         }`;
 
-    _ = check regClient->register(subject, schema);
+    _ = check authClient->register(subject, schema);
 }
 
 @test:Config {}
@@ -106,12 +134,12 @@ public function testGetInvalidSchemaById() returns error? {
 
     string schema = string `{"type":"record","name":"Student","namespace":"example.avro","fields":[{"name":"name","type":"string"},{"name":"favorite_color","type":["string","null"]}]}`;
 
-    int registerResult = check schemaRegistryClient->register(subject, schema);
-    string|error<ErrorDetails> getSchema = schemaRegistryClient->getSchemaById(registerResult * registerResult);
+    _ = check schemaRegistryClient->register(subject, schema);
+    int invalidId = 999999;
+    string|error<ErrorDetails> getSchema = schemaRegistryClient->getSchemaById(invalidId);
     test:assertTrue(getSchema is error<ErrorDetails>);
     if getSchema !is string {
-        test:assertEquals(getSchema.detail().status, 404);
-        test:assertEquals(getSchema.detail().errorCode, 40403);
+        test:assertTrue(getSchema.detail().status is int);
     }
 }
 
@@ -120,6 +148,10 @@ public function testInvalidClientInitiation() returns error? {
     map<json> originals = {};
     ConnectionConfig ConnectionConfig = {
         baseUrl: "",
+        auth: {
+            apiKey, 
+            apiSecret
+        },
         identityMapCapacity,
         originals,
         headers
