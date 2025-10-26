@@ -141,10 +141,50 @@ clean {
     delete 'build'
 }
 
+task startSchemaRegistryServer {
+    description = 'Start schema registry server for testing'
+    group = 'docker'
+    
+    doLast {
+        project.exec {
+            workingDir "${project.projectDir}/tests/resources"
+            if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+                commandLine 'cmd', '/c', 'docker-compose up -d'
+            } else {
+                // Try Docker Compose v2 first, fallback to v1 if not available
+                commandLine 'sh', '-c', 'docker compose up -d || docker-compose up -d'
+            }
+        }
+        println "Waiting for the schema registry server to be ready..."
+        Thread.sleep(15000)
+        println "The schema registry server should be ready now."
+    }
+}
+
+task stopSchemaRegistryServer {
+    description = 'Stop test schema registry server'
+    group = 'docker'
+    
+    doLast {
+        project.exec {
+            workingDir "${project.projectDir}/tests/resources"
+            if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+                commandLine 'cmd', '/c', 'docker-compose down'
+            } else {
+                // Try Docker Compose v2 first, fallback to v1 if not available
+                commandLine 'sh', '-c', 'docker compose down || docker-compose down'
+            }
+        }
+        println "The schema registry server has stopped."
+    }
+}
+
 build.dependsOn "generatePomFileForMavenPublication"
 build.dependsOn copyToLib
 build.dependsOn ":${packageName}-native:build"
 test.dependsOn ":${packageName}-native:build"
+test.dependsOn startSchemaRegistryServer
+test.finalizedBy stopSchemaRegistryServer
 
 publish.dependsOn build
 publishToMavenLocal.dependsOn build
