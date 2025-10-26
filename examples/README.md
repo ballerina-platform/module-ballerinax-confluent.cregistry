@@ -14,13 +14,9 @@ Create a `Config.toml` file with the base URL, schema capacity, subject, connect
     identityMapCapacity = <SCHEMA_MAP_CAPACITY>
     subject = <SCHEMA_REGISTRY_TOPIC>
 
-    [originals]
-    "schema.registry.url" = <SCHEMA_REGISTRY_ENDPOINT_URL>
-    "basic.auth.credentials.source" = "USER_INFO"
-    "bootstrap.servers" = "<SERVER>:<PORT>"
-    "schema.registry.basic.auth.user.info" = "<KEY>:<SECRET>"
-
-    [headers]
+    [auth]
+    apiKey = <API-KEY>
+    apiSecret = <API-SECRET>
     ```
 
 ## Running an Example

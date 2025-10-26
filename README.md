@@ -28,14 +28,14 @@ import ballerinax/confluent.cregistry;
 ```ballerina
 configurable string baseUrl = ?;
 configurable int identityMapCapacity = ?;
-configurable map<anydata> originals = ?;
-configurable map<string> headers = ?;
+configurable cregistry:AuthConfig auth = ?;
+configurable cregistry:SecureSocket secureSocket = ?;
 
 cregistry:Client schemaRegistryClient = check new ({
     baseUrl,
     identityMapCapacity,
-    originals,
-    headers
+    auth,
+    secureSocket
 });
 ```
 
@@ -63,6 +63,14 @@ Use the following command to compile and run the Ballerina program.
 ```bash
 bal run
 ```
+
+## Examples
+
+The Ballerina Confluent Schema Registry connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/ballerina-platform/module-ballerinax-confluent.cregistry/tree/main/examples).
+
+1. [User registration](https://github.com/ballerina-platform/module-ballerinax-confluent.cregistry/tree/main/examples/user-registration)
+    This example shows how to use Confluent Schema Registry APIs to register schemas and retrieve the corresponding ID of schemas.
+
 
 ## Issues and projects
 
