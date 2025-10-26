@@ -82,6 +82,10 @@ public final class CustomSchemaRegistryClient {
     public static final String SSL_ENABLED_PROTOCOLS = "ssl.enabled.protocols";
     public static final String SSL_CIPHER_SUITES = "ssl.cipher.suites";
     public static final String SSL_ENDPOINT_IDENTIFICATION_ALGORITHM = "ssl.endpoint.identification.algorithm";
+    public static final String SSL_KEYSTORE_LOCATION = "ssl.keystore.location";
+    public static final String SSL_KEYSTORE_PASSWORD = "ssl.keystore.password";
+    public static final String SSL_KEY_PASSWORD = "ssl.key.password";
+    public static final BString VERSIONS = StringUtils.fromString("versions");
 
     private CustomSchemaRegistryClient() {}
 
@@ -158,19 +162,19 @@ public final class CustomSchemaRegistryClient {
             
             if (path != null) {
                 configurations.put(SCHEMA_REGISTRY_SSL_KEYSTORE_LOCATION, path.toString());
-                configurations.put("ssl.keystore.location", path.toString());
+                configurations.put(SSL_KEYSTORE_LOCATION, path.toString());
             }
             if (password != null) {
                 configurations.put(SCHEMA_REGISTRY_SSL_KEYSTORE_PASSWORD, password.toString());
                 configurations.put(SCHEMA_REGISTRY_SSL_KEY_PASSWORD, password.toString());
-                configurations.put("ssl.keystore.password", password.toString());
-                configurations.put("ssl.key.password", password.toString());
+                configurations.put(SSL_KEYSTORE_PASSWORD, password.toString());
+                configurations.put(SSL_KEY_PASSWORD, password.toString());
             }
         }
         Object protocolConfig = secureSocketConfig.get(PROTOCOL);
         if (protocolConfig instanceof BMap) {
             BMap<BString, Object> protocol = (BMap<BString, Object>) protocolConfig;
-            Object versions = protocol.get(StringUtils.fromString("versions"));
+            Object versions = protocol.get(VERSIONS);
             if (versions instanceof BArray versionArray) {
                 StringBuilder protocols = new StringBuilder();
                 for (int i = 0; i < versionArray.size(); i++) {
