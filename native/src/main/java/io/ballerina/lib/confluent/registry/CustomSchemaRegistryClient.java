@@ -19,6 +19,7 @@
 package io.ballerina.lib.confluent.registry;
 
 import io.ballerina.runtime.api.utils.StringUtils;
+import io.ballerina.runtime.api.values.BArray;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BObject;
 import io.ballerina.runtime.api.values.BString;
@@ -43,13 +44,44 @@ public final class CustomSchemaRegistryClient {
     public static final BString API_KEY = StringUtils.fromString("apiKey");
     public static final BString API_SECRET = StringUtils.fromString("apiSecret");
     public static final String BASIC_AUTH_CREDENTIALS_SOURCE = "basic.auth.credentials.source";
-    public static final String SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO = "schema.registry.basic.auth.user.info";
+    public static final String SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO = "basic.auth.user.info";
     public static final BString BASE_URL = StringUtils.fromString("baseUrl");
     public static final BString IDENTITY_MAP_CAPACITY = StringUtils.fromString("identityMapCapacity");
     public static final BString ORIGINALS = StringUtils.fromString("originals");
     public static final BString HEADERS = StringUtils.fromString("headers");
+    public static final BString SECURE_SOCKET = StringUtils.fromString("secureSocket");
     public static final String NATIVE_CLIENT = "client";
     public static final String USER_INFO = "USER_INFO";
+
+    public static final String SCHEMA_REGISTRY_SSL_TRUSTSTORE_LOCATION = "schema.registry.ssl.truststore.location";
+    public static final String SCHEMA_REGISTRY_SSL_TRUSTSTORE_PASSWORD = "schema.registry.ssl.truststore.password";
+    public static final String SCHEMA_REGISTRY_SSL_TRUSTSTORE_TYPE = "schema.registry.ssl.truststore.type";
+    public static final String SCHEMA_REGISTRY_SSL_TRUSTSTORE_CERTIFICATES =
+            "schema.registry.ssl.truststore.certificates";
+    public static final String SCHEMA_REGISTRY_SSL_KEYSTORE_LOCATION = "schema.registry.ssl.keystore.location";
+    public static final String SCHEMA_REGISTRY_SSL_KEYSTORE_PASSWORD = "schema.registry.ssl.keystore.password";
+    public static final String SCHEMA_REGISTRY_SSL_KEY_PASSWORD = "schema.registry.ssl.key.password";
+    public static final String SCHEMA_REGISTRY_SSL_ENABLED_PROTOCOLS = "schema.registry.ssl.enabled.protocols";
+    public static final String SCHEMA_REGISTRY_SSL_CIPHER_SUITES = "schema.registry.ssl.cipher.suites";
+    public static final String SCHEMA_REGISTRY_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM =
+            "schema.registry.ssl.endpoint.identification.algorithm";
+
+    public static final BString ENABLE = StringUtils.fromString("enable");
+    public static final BString CERT = StringUtils.fromString("cert");
+    public static final BString KEY = StringUtils.fromString("key");
+    public static final BString PROTOCOL = StringUtils.fromString("protocol");
+    public static final BString CIPHERS = StringUtils.fromString("ciphers");
+    public static final BString VERIFY_HOST_NAME = StringUtils.fromString("verifyHostName");
+    public static final BString PATH = StringUtils.fromString("path");
+    public static final BString PASSWORD = StringUtils.fromString("password");
+    public static final String SSL_TRUSTSTORE_TYPE = "ssl.truststore.type";
+    public static final String SSL_TRUSTSTORE_CERTIFICATES = "ssl.truststore.certificates";
+    public static final String SSL_TRUSTSTORE_LOCATION = "ssl.truststore.location";
+    public static final String SSL_TRUSTSTORE_PASSWORD = "ssl.truststore.password";
+    public static final String PEM = "PEM";
+    public static final String SSL_ENABLED_PROTOCOLS = "ssl.enabled.protocols";
+    public static final String SSL_CIPHER_SUITES = "ssl.cipher.suites";
+    public static final String SSL_ENDPOINT_IDENTIFICATION_ALGORITHM = "ssl.endpoint.identification.algorithm";
 
     private CustomSchemaRegistryClient() {}
 
@@ -59,6 +91,7 @@ public final class CustomSchemaRegistryClient {
         BMap<BString, Object> originals = (BMap<BString, Object>) config.getMapValue(ORIGINALS);
         BMap<BString, Object> httpHeaders = (BMap<BString, Object>) config.getMapValue(HEADERS);
         BMap<BString, Object> authConfig = (BMap<BString, Object>) config.getMapValue(AUTH_CONFIG);
+        BMap<BString, Object> secureSocketConfig = (BMap<BString, Object>) config.getMapValue(SECURE_SOCKET);
         Map<String, String> configurations = new HashMap<>();
         if (authConfig != null && (authConfig.getType().getName().contains(CREDENTIALS_CONFIG) ||
                 authConfig.getType().getCachedReferredType() != null &&
@@ -68,12 +101,16 @@ public final class CustomSchemaRegistryClient {
             configurations.put(BASIC_AUTH_CREDENTIALS_SOURCE, USER_INFO);
             configurations.put(SCHEMA_REGISTRY_BASIC_AUTH_USER_INFO, apiKey.getValue() + ":" + apiSecret.getValue());
         }
+        if (secureSocketConfig != null) {
+            handleSecureSocketConfiguration(secureSocketConfig, configurations);
+        }
         if (originals != null) {
             for (BString key: originals.getKeys()) {
                 configurations.put(key.getValue().replaceAll("^\"|\"$", ""),
                                    originals.get(key).toString());
             }
         }
+        
         Map<String, String> headers = new HashMap<>();
         if (httpHeaders != null) {
             for (BString header : httpHeaders.getKeys()) {
@@ -83,6 +120,86 @@ public final class CustomSchemaRegistryClient {
         SchemaRegistryClient registry = new CachedSchemaRegistryClient(baseUrl.getValue(), (int) identityMapCapacity,
                                                                        configurations, headers);
         registryClient.addNativeData(NATIVE_CLIENT, registry);
+    }
+
+    private static void handleSecureSocketConfiguration(BMap<BString, Object> secureSocketConfig, 
+                                                        Map<String, String> configurations) {
+        boolean enable = secureSocketConfig.getBooleanValue(ENABLE);
+        if (!enable) {
+            return;
+        }
+        Object certConfig = secureSocketConfig.get(CERT);
+        if (certConfig != null) {
+            if (certConfig instanceof BString) {
+                String certPath = ((BString) certConfig).getValue();
+                configurations.put(SCHEMA_REGISTRY_SSL_TRUSTSTORE_TYPE, PEM);
+                configurations.put(SCHEMA_REGISTRY_SSL_TRUSTSTORE_CERTIFICATES, certPath);
+                configurations.put(SSL_TRUSTSTORE_TYPE, PEM);
+                configurations.put(SSL_TRUSTSTORE_CERTIFICATES, certPath);
+            } else if (certConfig instanceof BMap) {
+                BMap<BString, Object> trustStoreConfig = (BMap<BString, Object>) certConfig;
+                Object path = trustStoreConfig.get(PATH);
+                Object password = trustStoreConfig.get(PASSWORD);
+                if (path != null) {
+                    configurations.put(SCHEMA_REGISTRY_SSL_TRUSTSTORE_LOCATION, path.toString());
+                    configurations.put(SSL_TRUSTSTORE_LOCATION, path.toString());
+                }
+                if (password != null) {
+                    configurations.put(SCHEMA_REGISTRY_SSL_TRUSTSTORE_PASSWORD, password.toString());
+                    configurations.put(SSL_TRUSTSTORE_PASSWORD, password.toString());
+                }
+            }
+        }
+        Object keyConfig = secureSocketConfig.get(KEY);
+        if (keyConfig instanceof BMap) {
+            BMap<BString, Object> keyStoreConfig = (BMap<BString, Object>) keyConfig;
+            Object path = keyStoreConfig.get(PATH);
+            Object password = keyStoreConfig.get(PASSWORD);
+            
+            if (path != null) {
+                configurations.put(SCHEMA_REGISTRY_SSL_KEYSTORE_LOCATION, path.toString());
+                configurations.put("ssl.keystore.location", path.toString());
+            }
+            if (password != null) {
+                configurations.put(SCHEMA_REGISTRY_SSL_KEYSTORE_PASSWORD, password.toString());
+                configurations.put(SCHEMA_REGISTRY_SSL_KEY_PASSWORD, password.toString());
+                configurations.put("ssl.keystore.password", password.toString());
+                configurations.put("ssl.key.password", password.toString());
+            }
+        }
+        Object protocolConfig = secureSocketConfig.get(PROTOCOL);
+        if (protocolConfig instanceof BMap) {
+            BMap<BString, Object> protocol = (BMap<BString, Object>) protocolConfig;
+            Object versions = protocol.get(StringUtils.fromString("versions"));
+            if (versions instanceof BArray versionArray) {
+                StringBuilder protocols = new StringBuilder();
+                for (int i = 0; i < versionArray.size(); i++) {
+                    if (i > 0) {
+                        protocols.append(",");
+                    }
+                    protocols.append(versionArray.getBString(i).getValue());
+                }
+                configurations.put(SCHEMA_REGISTRY_SSL_ENABLED_PROTOCOLS, protocols.toString());
+                configurations.put(SSL_ENABLED_PROTOCOLS, protocols.toString());
+            }
+        }
+        Object ciphersConfig = secureSocketConfig.get(CIPHERS);
+        if (ciphersConfig instanceof BArray cipherArray) {
+            StringBuilder ciphers = new StringBuilder();
+            for (int i = 0; i < cipherArray.size(); i++) {
+                if (i > 0) {
+                    ciphers.append(",");
+                }
+                ciphers.append(cipherArray.getBString(i).getValue());
+            }
+            configurations.put(SCHEMA_REGISTRY_SSL_CIPHER_SUITES, ciphers.toString());
+            configurations.put(SSL_CIPHER_SUITES, ciphers.toString());
+        }
+        boolean verifyHostName = secureSocketConfig.getBooleanValue(VERIFY_HOST_NAME);
+        if (!verifyHostName) {
+            configurations.put(SCHEMA_REGISTRY_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM, "");
+            configurations.put(SSL_ENDPOINT_IDENTIFICATION_ALGORITHM, "");
+        }
     }
 
     public static Object register(BObject registryClient, BString subject, BString schema) {
