@@ -158,7 +158,6 @@ public final class CustomSchemaRegistryClient {
             BMap<BString, Object> keyStoreConfig = (BMap<BString, Object>) keyConfig;
             Object path = keyStoreConfig.get(PATH);
             Object password = keyStoreConfig.get(PASSWORD);
-            
             if (path != null) {
                 configurations.put(SCHEMA_REGISTRY_SSL_KEYSTORE_LOCATION, path.toString());
                 configurations.put(SSL_KEYSTORE_LOCATION, path.toString());
