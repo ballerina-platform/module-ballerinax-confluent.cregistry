@@ -69,7 +69,6 @@ public function testAuthConfigs() returns error? {
         },
         identityMapCapacity
     });
-    
     string subject = "test-auth-topic";
     string schema = string `
         {
