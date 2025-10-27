@@ -114,7 +114,6 @@ public final class CustomSchemaRegistryClient {
                                    originals.get(key).toString());
             }
         }
-        
         Map<String, String> headers = new HashMap<>();
         if (httpHeaders != null) {
             for (BString header : httpHeaders.getKeys()) {
