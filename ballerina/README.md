@@ -1,4 +1,4 @@
-## Overview
+## Package overview
 
 [Confluent Schema Registry](https://docs.confluent.io/platform/current/schema-registry/) serves as a centralized repository for managing Avro schemas, ensuring data consistency and compatibility in serialization and deserialization processes.
 
@@ -46,7 +46,7 @@ public function main() returns error? {
     string schema = string `
         {
             "type": "int",
-            "name" : "value", 
+            "name" : "value",
             "namespace": "data"
         }`;
 
@@ -58,6 +58,6 @@ public function main() returns error? {
 
 Use the following command to compile and run the Ballerina program.
 
-```bash
+```
 bal run
 ```
