@@ -15,7 +15,7 @@ graalvmCompatible = true
 groupId = "io.ballerina.lib"
 artifactId = "schema-registry-native"
 version = "0.4.3"
-path = "../native/build/libs/confluent.cregistry-native-0.4.3-SNAPSHOT.jar"
+path = "../native/build/libs/confluent.cregistry-native-0.4.3.jar"
 
 [[platform.java21.dependency]]
 groupId = "io.confluent"
