@@ -1,8 +1,14 @@
-## Package overview
+## Overview
 
 [Confluent Schema Registry](https://docs.confluent.io/platform/current/schema-registry/) serves as a centralized repository for managing Avro schemas, ensuring data consistency and compatibility in serialization and deserialization processes.
 
-The Ballerina Confluent Schema Registry connector integrates with Confluent's Avro Schema Registry, providing users to efficiently manage schemas within Ballerina applications.
+The Confluent Schema Registry connector integrates with Confluent's Avro Schema Registry, allowing users to efficiently manage schemas.
+
+### Key Features
+
+- Centralized repository for managing Avro schemas
+- Ensures data consistency and compatibility
+- Efficient schema management and integration
 
 ## Quickstart
 
