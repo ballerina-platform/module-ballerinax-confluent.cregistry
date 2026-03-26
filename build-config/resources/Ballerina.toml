@@ -5,6 +5,7 @@ version = "@toml.version@"
 authors = ["Ballerina"]
 keywords = ["Messaging/Schema Registry", "Cost/Freemium", "Vendor/Confluent", "Area/Messaging", "Type/Connector"]
 repository = "https://github.com/ballerina-platform/module-ballerinax-confluent.cregistry"
+icon = "icon.png"
 license = ["Apache-2.0"]
 distribution = "2201.11.0"
 
