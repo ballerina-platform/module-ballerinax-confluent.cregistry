@@ -5,6 +5,7 @@ version = "0.4.4"
 authors = ["Ballerina"]
 keywords = ["Messaging/Schema Registry", "Cost/Freemium", "Vendor/Confluent", "Area/Messaging", "Type/Connector"]
 repository = "https://github.com/ballerina-platform/module-ballerinax-confluent.cregistry"
+icon = "icon.png"
 license = ["Apache-2.0"]
 distribution = "2201.11.0"
 
@@ -15,7 +16,7 @@ graalvmCompatible = true
 groupId = "io.ballerina.lib"
 artifactId = "schema-registry-native"
 version = "0.4.4"
-path = "../native/build/libs/confluent.cregistry-native-0.4.4-SNAPSHOT.jar"
+path = "../native/build/libs/confluent.cregistry-native-0.4.4.jar"
 
 [[platform.java21.dependency]]
 groupId = "io.confluent"
