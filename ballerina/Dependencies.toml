@@ -335,7 +335,7 @@ dependencies = [
 [[package]]
 org = "ballerinax"
 name = "confluent.cregistry"
-version = "0.4.4"
+version = "0.4.5"
 dependencies = [
 	{org = "ballerina", name = "http"},
 	{org = "ballerina", name = "jballerina.java"},
