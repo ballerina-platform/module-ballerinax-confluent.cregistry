@@ -1,7 +1,7 @@
 [package]
 org = "ballerinax"
 name = "confluent.cregistry"
-version = "0.4.4"
+version = "0.4.5"
 authors = ["Ballerina"]
 keywords = ["Messaging/Schema Registry", "Cost/Freemium", "Vendor/Confluent", "Area/Messaging", "Type/Connector"]
 repository = "https://github.com/ballerina-platform/module-ballerinax-confluent.cregistry"
@@ -15,8 +15,8 @@ graalvmCompatible = true
 [[platform.java21.dependency]]
 groupId = "io.ballerina.lib"
 artifactId = "schema-registry-native"
-version = "0.4.4"
-path = "../native/build/libs/confluent.cregistry-native-0.4.4.jar"
+version = "0.4.5"
+path = "../native/build/libs/confluent.cregistry-native-0.4.5-SNAPSHOT.jar"
 
 [[platform.java21.dependency]]
 groupId = "io.confluent"
@@ -51,20 +51,20 @@ path = "./lib/avro-1.11.4.jar"
 [[platform.java21.dependency]]
 groupId = "com.fasterxml.jackson.core"
 artifactId = "jackson-core"
-version = "2.18.6"
-path = "./lib/jackson-core-2.18.6.jar"
+version = "2.18.8"
+path = "./lib/jackson-core-2.18.8.jar"
 
 [[platform.java11.dependency]]
 groupId = "com.fasterxml.jackson.core"
 artifactId = "jackson-annotations"
-version = "2.18.6"
-path = "./lib/jackson-annotations-2.18.6.jar"
+version = "2.18.8"
+path = "./lib/jackson-annotations-2.18.8.jar"
 
 [[platform.java11.dependency]]
 groupId = "com.fasterxml.jackson.core"
 artifactId = "jackson-databind"
-version = "2.18.6"
-path = "./lib/jackson-databind-2.18.6.jar"
+version = "2.18.8"
+path = "./lib/jackson-databind-2.18.8.jar"
 
 [[platform.java11.dependency]]
 groupId = "com.google.guava"

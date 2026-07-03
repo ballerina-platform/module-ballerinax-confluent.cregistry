@@ -1,3 +1,7 @@
 # Apache Commons Vulnerability (remove once the fixed version for Apache Avro is delivered)
 CVE-2024-25710
 CVE-2024-26308
+
+# jackson-databind CVEs fixed only in 2.18.9, which FasterXML has not yet published to Maven Central (remove once 2.18.9 is released and the dependency is bumped)
+CVE-2026-54514
+CVE-2026-54515
