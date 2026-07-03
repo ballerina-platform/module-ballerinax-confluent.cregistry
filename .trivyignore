@@ -2,6 +2,5 @@
 CVE-2024-25710
 CVE-2024-26308
 
-# jackson-databind CVEs fixed only in 2.18.9, which FasterXML has not yet published to Maven Central (remove once 2.18.9 is released and the dependency is bumped)
-CVE-2026-54514
+# jackson-databind CVE fixed only in 2.18.9, which FasterXML has not yet published to Maven Central (remove once 2.18.9 is released and the dependency is bumped)
 CVE-2026-54515
