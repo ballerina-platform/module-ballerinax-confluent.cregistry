@@ -53,7 +53,14 @@ ballerina {
 }
 
 configurations {
-    externalJars
+    externalJars {
+        // Guava 33.x publishes jre/android variants; select the standard JVM runtime variant.
+        attributes {
+            attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, Usage.JAVA_RUNTIME))
+            attribute(TargetJvmEnvironment.TARGET_JVM_ENVIRONMENT_ATTRIBUTE,
+                    objects.named(TargetJvmEnvironment, TargetJvmEnvironment.STANDARD_JVM))
+        }
+    }
     jbalTools
     ballerinaStdLibs
 }
@@ -86,7 +93,7 @@ dependencies {
     externalJars(group: 'org.apache.avro', name: 'avro', version: "${avroVersion}") {
         transitive = false
     }
-    externalJars(group: 'com.google.guava', name: 'guava', version: '32.0.1-jre') {
+    externalJars(group: 'com.google.guava', name: 'guava', version: "${guavaVersion}") {
         transitive = false
     }
 }
@@ -97,6 +104,7 @@ task updateTomlFiles {
         newBallerinaToml = newBallerinaToml.replace("@toml.version@", tomlVersion)
         newBallerinaToml = newBallerinaToml.replace("@avro.version@", avroVersion)
         newBallerinaToml = newBallerinaToml.replace("@jackson.version@", jacksonVersion)
+        newBallerinaToml = newBallerinaToml.replace("@guava.version@", guavaVersion)
         newBallerinaToml = newBallerinaToml.replace("@kafka.schema.registry.version@", kafkaSchemaRegistryVersion)
         newBallerinaToml = newBallerinaToml.replace("@commons.version@", commonConfigVersion)
         newBallerinaToml = newBallerinaToml.replace("@common.config.version@", commonConfigVersion)
