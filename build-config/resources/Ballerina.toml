@@ -69,5 +69,5 @@ path = "./lib/jackson-databind-@jackson.version@.jar"
 [[platform.java11.dependency]]
 groupId = "com.google.guava"
 artifactId = "guava"
-version = "32.0.1-jre"
-path = "./lib/guava-32.0.1-jre.jar"
+version = "@guava.version@"
+path = "./lib/guava-@guava.version@.jar"
